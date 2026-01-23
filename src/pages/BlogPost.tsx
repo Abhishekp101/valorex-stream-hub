@@ -3,11 +3,20 @@ import { Film, ArrowLeft, Calendar, Download } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useBlog } from '@/context/BlogContext';
 import ThemeToggle from '@/components/ThemeToggle';
+import ShareButtons from '@/components/ShareButtons';
 
 const BlogPost = () => {
   const { id } = useParams<{ id: string }>();
-  const { posts } = useBlog();
+  const { posts, loading } = useBlog();
   const post = posts.find((p) => p.id === id);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   if (!post) {
     return (
@@ -74,6 +83,11 @@ const BlogPost = () => {
             {post.movieName}
           </h1>
 
+          {/* Share Buttons */}
+          <div className="mb-8 pb-6 border-b border-border">
+            <ShareButtons title={`${post.movieName} - Valorex Blog`} />
+          </div>
+
           {/* Article Content */}
           <div className="prose prose-neutral dark:prose-invert max-w-none mb-8">
             <p className="text-lg leading-relaxed text-muted-foreground whitespace-pre-wrap">
@@ -96,6 +110,11 @@ const BlogPost = () => {
               <Download className="w-4 h-4" />
               Download Now
             </a>
+          </div>
+
+          {/* Bottom Share */}
+          <div className="mt-8 pt-6 border-t border-border">
+            <ShareButtons title={`Download ${post.movieName} - Valorex`} />
           </div>
         </motion.article>
       </main>

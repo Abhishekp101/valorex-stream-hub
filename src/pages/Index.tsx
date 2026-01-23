@@ -1,21 +1,21 @@
 import { useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { useMovies } from '@/context/MovieContext';
 import Header from '@/components/Header';
 import SearchFilters from '@/components/SearchFilters';
 import MovieCard from '@/components/MovieCard';
-import MovieModal from '@/components/MovieModal';
 import Pagination from '@/components/Pagination';
-import { Movie, CategoryFilter, LanguageFilter } from '@/types/movie';
+import { CategoryFilter, LanguageFilter } from '@/types/movie';
+import { Loader2 } from 'lucide-react';
 
 const MOVIES_PER_PAGE = 10;
 
 const Index = () => {
-  const { movies } = useMovies();
+  const { movies, loading } = useMovies();
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>('all');
   const [languageFilter, setLanguageFilter] = useState<LanguageFilter>('all');
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
   const filteredMovies = useMemo(() => {
     return movies.filter((movie) => {
@@ -76,16 +76,21 @@ const Index = () => {
           </p>
         </div>
 
-        {/* Movies Grid */}
-        {paginatedMovies.length > 0 ? (
+        {/* Loading State */}
+        {loading ? (
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+          </div>
+        ) : paginatedMovies.length > 0 ? (
           <section className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
             {paginatedMovies.map((movie, index) => (
-              <MovieCard
-                key={movie.id}
-                movie={movie}
-                index={index}
-                onClick={() => setSelectedMovie(movie)}
-              />
+              <Link to={`/movie/${movie.id}`} key={movie.id}>
+                <MovieCard
+                  movie={movie}
+                  index={index}
+                  onClick={() => {}}
+                />
+              </Link>
             ))}
           </section>
         ) : (
@@ -101,14 +106,6 @@ const Index = () => {
           onPageChange={handlePageChange}
         />
       </main>
-
-      {/* Movie Details Modal */}
-      {selectedMovie && (
-        <MovieModal
-          movie={selectedMovie}
-          onClose={() => setSelectedMovie(null)}
-        />
-      )}
     </div>
   );
 };

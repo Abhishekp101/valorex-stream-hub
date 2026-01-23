@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Film, Settings, FileText } from 'lucide-react';
+import { Film, Settings, FileText, Package } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 
 const Header = () => {
@@ -13,17 +13,24 @@ const Header = () => {
           <span className="font-display text-xl font-bold tracking-tight">Valorex</span>
         </Link>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1 sm:gap-3">
           <Link
             to="/blog"
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg hover:bg-secondary transition-colors"
+            className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg hover:bg-secondary transition-colors"
           >
             <FileText className="w-4 h-4" />
             <span className="hidden sm:inline">Blog</span>
           </Link>
           <Link
+            to="/software"
+            className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg hover:bg-secondary transition-colors"
+          >
+            <Package className="w-4 h-4" />
+            <span className="hidden sm:inline">Software</span>
+          </Link>
+          <Link
             to="/admin"
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg bg-secondary hover:bg-accent transition-colors"
+            className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg bg-secondary hover:bg-accent transition-colors"
           >
             <Settings className="w-4 h-4" />
             <span className="hidden sm:inline">Admin</span>

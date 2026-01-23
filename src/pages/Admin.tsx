@@ -1,14 +1,30 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowLeft, Film, FileText } from 'lucide-react';
+import { Link, Navigate } from 'react-router-dom';
+import { ArrowLeft, Film, FileText, Package, LogOut, Loader2 } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
 import ThemeToggle from '@/components/ThemeToggle';
 import MovieAdmin from '@/components/admin/MovieAdmin';
 import BlogAdmin from '@/components/admin/BlogAdmin';
+import SoftwareAdmin from '@/components/admin/SoftwareAdmin';
+import { Button } from '@/components/ui/button';
 
-type AdminTab = 'movies' | 'blog';
+type AdminTab = 'movies' | 'blog' | 'software';
 
 const Admin = () => {
+  const { user, isAdmin, loading, signOut } = useAuth();
   const [activeTab, setActiveTab] = useState<AdminTab>('movies');
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -30,7 +46,18 @@ const Admin = () => {
               <span className="font-display text-xl font-bold">Admin Panel</span>
             </div>
           </div>
-          <ThemeToggle />
+          <div className="flex items-center gap-3">
+            {!isAdmin && (
+              <span className="text-sm text-amber-500 font-medium">
+                Not Admin
+              </span>
+            )}
+            <Button variant="ghost" size="sm" onClick={signOut}>
+              <LogOut className="w-4 h-4 mr-2" />
+              Logout
+            </Button>
+            <ThemeToggle />
+          </div>
         </div>
       </header>
 
@@ -46,7 +73,7 @@ const Admin = () => {
             }`}
           >
             <Film className="w-4 h-4" />
-            Movie Admin
+            Movies
           </button>
           <button
             onClick={() => setActiveTab('blog')}
@@ -57,12 +84,25 @@ const Admin = () => {
             }`}
           >
             <FileText className="w-4 h-4" />
-            Blog Admin
+            Blog
+          </button>
+          <button
+            onClick={() => setActiveTab('software')}
+            className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-md transition-all ${
+              activeTab === 'software'
+                ? 'bg-background text-foreground shadow-sm'
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            <Package className="w-4 h-4" />
+            Software
           </button>
         </div>
 
         {/* Content */}
-        {activeTab === 'movies' ? <MovieAdmin /> : <BlogAdmin />}
+        {activeTab === 'movies' && <MovieAdmin />}
+        {activeTab === 'blog' && <BlogAdmin />}
+        {activeTab === 'software' && <SoftwareAdmin />}
       </main>
     </div>
   );
