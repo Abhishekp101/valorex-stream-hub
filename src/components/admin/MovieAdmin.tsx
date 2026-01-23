@@ -1,11 +1,16 @@
 import { useState } from 'react';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useMovies } from '@/context/MovieContext';
+import { useAuth } from '@/context/AuthContext';
 import { Movie } from '@/types/movie';
+import { useToast } from '@/hooks/use-toast';
 
 const MovieAdmin = () => {
-  const { movies, addMovie, deleteMovie } = useMovies();
+  const { movies, addMovie, deleteMovie, loading } = useMovies();
+  const { isAdmin } = useAuth();
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     poster: '',
@@ -17,27 +22,71 @@ const MovieAdmin = () => {
     downloadLink: '',
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.title || !formData.poster || !formData.downloadLink) {
+      toast({
+        title: 'Error',
+        description: 'Please fill in required fields',
+        variant: 'destructive',
+      });
       return;
     }
-    addMovie(formData);
-    setFormData({
-      title: '',
-      poster: '',
-      date: '',
-      category: 'hollywood',
-      language: 'dual',
-      quality: 'WEB-DL',
-      info: '',
-      downloadLink: '',
-    });
+    
+    setIsSubmitting(true);
+    try {
+      await addMovie(formData);
+      toast({
+        title: 'Success',
+        description: 'Movie added successfully!',
+      });
+      setFormData({
+        title: '',
+        poster: '',
+        date: '',
+        category: 'hollywood',
+        language: 'dual',
+        quality: 'WEB-DL',
+        info: '',
+        downloadLink: '',
+      });
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to add movie',
+        variant: 'destructive',
+      });
+    }
+    setIsSubmitting(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteMovie(id);
+      toast({
+        title: 'Deleted',
+        description: 'Movie deleted successfully',
+      });
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to delete movie',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  if (!isAdmin) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-muted-foreground">You need admin privileges to manage movies.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="grid lg:grid-cols-2 gap-8">
@@ -159,9 +208,17 @@ const MovieAdmin = () => {
 
           <button
             type="submit"
-            className="w-full py-3 px-6 font-display font-semibold text-sm rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
+            disabled={isSubmitting}
+            className="w-full py-3 px-6 font-display font-semibold text-sm rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
           >
-            Add Movie
+            {isSubmitting ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Adding...
+              </>
+            ) : (
+              'Add Movie'
+            )}
           </button>
         </form>
       </motion.section>
@@ -177,33 +234,39 @@ const MovieAdmin = () => {
           All Movies ({movies.length})
         </h2>
 
-        <div className="space-y-3 max-h-[600px] overflow-y-auto">
-          {movies.map((movie) => (
-            <div
-              key={movie.id}
-              className="flex items-center gap-4 p-3 rounded-lg bg-secondary/50 hover:bg-secondary transition-colors"
-            >
-              <img
-                src={movie.poster}
-                alt={movie.title}
-                className="w-12 h-16 object-cover rounded"
-              />
-              <div className="flex-1 min-w-0">
-                <h3 className="font-medium text-sm truncate">{movie.title}</h3>
-                <p className="text-xs text-muted-foreground">
-                  {movie.category} • {movie.language}
-                </p>
-              </div>
-              <button
-                onClick={() => deleteMovie(movie.id)}
-                className="flex-shrink-0 p-2 rounded-lg text-destructive hover:bg-destructive/10 transition-colors"
-                aria-label="Delete movie"
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+          </div>
+        ) : (
+          <div className="space-y-3 max-h-[600px] overflow-y-auto">
+            {movies.map((movie) => (
+              <div
+                key={movie.id}
+                className="flex items-center gap-4 p-3 rounded-lg bg-secondary/50 hover:bg-secondary transition-colors"
               >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </div>
-          ))}
-        </div>
+                <img
+                  src={movie.poster}
+                  alt={movie.title}
+                  className="w-12 h-16 object-cover rounded"
+                />
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-medium text-sm truncate">{movie.title}</h3>
+                  <p className="text-xs text-muted-foreground">
+                    {movie.category} • {movie.language}
+                  </p>
+                </div>
+                <button
+                  onClick={() => handleDelete(movie.id)}
+                  className="flex-shrink-0 p-2 rounded-lg text-destructive hover:bg-destructive/10 transition-colors"
+                  aria-label="Delete movie"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
       </motion.section>
     </div>
   );

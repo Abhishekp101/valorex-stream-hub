@@ -1,40 +1,84 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import { Movie } from '@/types/movie';
-import { sampleMovies } from '@/data/sampleMovies';
 
 interface MovieContextType {
   movies: Movie[];
-  addMovie: (movie: Omit<Movie, 'id'>) => void;
-  deleteMovie: (id: string) => void;
+  loading: boolean;
+  addMovie: (movie: Omit<Movie, 'id'>) => Promise<void>;
+  deleteMovie: (id: string) => Promise<void>;
+  refreshMovies: () => Promise<void>;
 }
 
 const MovieContext = createContext<MovieContextType | undefined>(undefined);
 
 export const MovieProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [movies, setMovies] = useState<Movie[]>(() => {
-    const stored = localStorage.getItem('valorex-movies');
-    return stored ? JSON.parse(stored) : sampleMovies;
-  });
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const saveMovies = (newMovies: Movie[]) => {
-    setMovies(newMovies);
-    localStorage.setItem('valorex-movies', JSON.stringify(newMovies));
+  const fetchMovies = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from('movies')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (!error && data) {
+      const mappedMovies: Movie[] = data.map((m) => ({
+        id: m.id,
+        title: m.title,
+        poster: m.poster_url || '',
+        date: m.release_date || '',
+        category: (m.category as 'hollywood' | 'bollywood') || 'hollywood',
+        language: (m.language as 'english' | 'hindi' | 'dual') || 'english',
+        quality: m.quality || '1080p',
+        info: m.info || '',
+        downloadLink: m.download_link || '',
+      }));
+      setMovies(mappedMovies);
+    }
+    setLoading(false);
   };
 
-  const addMovie = (movie: Omit<Movie, 'id'>) => {
-    const newMovie: Movie = {
-      ...movie,
-      id: Date.now().toString(),
-    };
-    saveMovies([newMovie, ...movies]);
+  useEffect(() => {
+    fetchMovies();
+  }, []);
+
+  const addMovie = async (movie: Omit<Movie, 'id'>) => {
+    const { error } = await supabase.from('movies').insert({
+      title: movie.title,
+      poster_url: movie.poster,
+      release_date: movie.date,
+      category: movie.category,
+      language: movie.language,
+      quality: movie.quality,
+      info: movie.info,
+      download_link: movie.downloadLink,
+    });
+
+    if (!error) {
+      await fetchMovies();
+    } else {
+      throw new Error(error.message);
+    }
   };
 
-  const deleteMovie = (id: string) => {
-    saveMovies(movies.filter(m => m.id !== id));
+  const deleteMovie = async (id: string) => {
+    const { error } = await supabase.from('movies').delete().eq('id', id);
+
+    if (!error) {
+      await fetchMovies();
+    } else {
+      throw new Error(error.message);
+    }
+  };
+
+  const refreshMovies = async () => {
+    await fetchMovies();
   };
 
   return (
-    <MovieContext.Provider value={{ movies, addMovie, deleteMovie }}>
+    <MovieContext.Provider value={{ movies, loading, addMovie, deleteMovie, refreshMovies }}>
       {children}
     </MovieContext.Provider>
   );
