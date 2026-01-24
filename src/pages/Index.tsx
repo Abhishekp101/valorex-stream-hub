@@ -48,12 +48,16 @@ const Index = () => {
       
       <main className="container py-8">
         {/* Hero Section */}
-        <section className="text-center mb-10">
-          <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight mb-3">
-            Download Movies
+        <section className="text-center mb-12">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
+            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+            Latest Releases Available
+          </div>
+          <h1 className="font-display text-4xl md:text-6xl font-bold tracking-tight mb-4">
+            Download <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Premium</span> Movies
           </h1>
-          <p className="text-muted-foreground max-w-xl mx-auto">
-            Your destination for the latest Hollywood & Bollywood movies in HD quality
+          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+            Your ultimate destination for the latest Hollywood & Bollywood blockbusters in stunning HD quality
           </p>
         </section>
 
