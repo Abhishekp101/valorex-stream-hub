@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { supabase } from '@/integrations/supabase/client';
 import Header from '@/components/Header';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -84,12 +85,16 @@ const Software = () => {
       
       <main className="container py-8">
         {/* Hero Section */}
-        <section className="text-center mb-10">
-          <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight mb-3">
-            Software & Games
+        <section className="text-center mb-12">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
+            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+            All Platforms Supported
+          </div>
+          <h1 className="font-display text-4xl md:text-6xl font-bold tracking-tight mb-4">
+            Software & <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Games</span>
           </h1>
-          <p className="text-muted-foreground max-w-xl mx-auto">
-            Download the latest software, apps, and games for all platforms
+          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+            Download the latest premium software, apps, and games for all your devices
           </p>
         </section>
 
@@ -135,14 +140,17 @@ const Software = () => {
                   ))}
                 </div>
               ) : items.length > 0 ? (
-                <div className="space-y-3">
-                  {items.map((item) => (
-                    <div
+                <div className="space-y-4">
+                  {items.map((item, index) => (
+                    <motion.div
                       key={item.id}
-                      className="flex items-center gap-4 p-4 rounded-xl border border-border bg-card hover:border-primary/50 transition-colors"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                      className="flex items-center gap-4 p-5 rounded-2xl border border-border bg-card hover:border-primary/50 hover:shadow-valorex transition-all duration-300"
                     >
                       {/* Icon */}
-                      <div className="w-16 h-16 rounded-lg overflow-hidden bg-secondary flex-shrink-0">
+                      <div className="w-16 h-16 rounded-xl overflow-hidden bg-secondary flex-shrink-0 shadow-md">
                         {item.icon_url ? (
                           <img
                             src={item.icon_url}
@@ -150,7 +158,7 @@ const Software = () => {
                             className="w-full h-full object-cover"
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center">
+                          <div className="w-full h-full flex items-center justify-center text-primary">
                             {platformIcons[item.platform]}
                           </div>
                         )}
@@ -159,45 +167,47 @@ const Software = () => {
                       {/* Info */}
                       <div className="flex-1 min-w-0">
                         <h3 className="font-semibold text-lg truncate">
-                          {item.name} {item.version && <span className="text-muted-foreground font-normal">{item.version}</span>}
+                          {item.name} 
+                          {item.version && (
+                            <span className="text-muted-foreground font-normal text-sm ml-2">{item.version}</span>
+                          )}
                         </h3>
-                        <p className="text-sm text-muted-foreground truncate">
+                        <p className="text-sm text-muted-foreground truncate mt-1">
                           {item.description}
                         </p>
-                        {item.category && (
-                          <Badge variant="outline" className="mt-1 text-primary">
-                            {item.category}
-                          </Badge>
-                        )}
+                        <div className="flex items-center gap-2 mt-2">
+                          {item.category && (
+                            <Badge variant="outline" className="text-primary border-primary/30">
+                              {item.category}
+                            </Badge>
+                          )}
+                        </div>
                       </div>
 
-                      {/* Platform & Downloads */}
-                      <div className="hidden md:flex items-center gap-6">
+                      {/* Stats */}
+                      <div className="hidden md:flex items-center gap-8">
                         <div className="text-center">
-                          <div className="flex items-center gap-1 text-muted-foreground">
-                            {platformIcons[item.platform]}
-                            <span className="text-sm">{platformLabels[item.platform]}</span>
-                          </div>
-                          <div className="flex items-center gap-1 mt-1">
-                            <Download className="w-3 h-3 text-muted-foreground" />
-                            <span className="text-sm">
+                          <div className="flex items-center gap-1 mb-1">
+                            <Download className="w-4 h-4 text-muted-foreground" />
+                            <span className="font-semibold">
                               {item.download_count ? formatDownloadCount(item.download_count) : '0'}
                             </span>
                           </div>
+                          <span className="text-xs text-muted-foreground">Downloads</span>
                         </div>
 
                         <div className="text-center">
-                          <span className="text-xs text-muted-foreground">Reputation</span>
-                          <div className="flex items-center gap-0.5">
+                          <div className="flex items-center gap-0.5 mb-1">
                             {renderStars(item.reputation || 4)}
                           </div>
+                          <span className="text-xs text-muted-foreground">Rating</span>
                         </div>
                       </div>
 
                       {/* Size & Download */}
-                      <div className="text-right flex-shrink-0">
+                      <div className="text-right flex-shrink-0 flex flex-col items-end gap-2">
                         {item.file_size && (
-                          <span className="text-lg font-semibold">
+                          <span className="text-lg font-bold text-foreground">
                             {item.file_size}
                           </span>
                         )}
@@ -206,15 +216,15 @@ const Software = () => {
                             href={item.download_link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="block mt-2"
                           >
-                            <Button size="sm" variant="outline">
-                              <ExternalLink className="w-4 h-4" />
+                            <Button size="sm" className="gap-2 bg-gradient-to-r from-primary to-accent hover:opacity-90">
+                              <Download className="w-4 h-4" />
+                              Get
                             </Button>
                           </a>
                         )}
                       </div>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
               ) : (

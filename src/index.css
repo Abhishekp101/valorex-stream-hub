@@ -9,101 +9,105 @@
 @import "@fontsource/inter/400.css";
 @import "@fontsource/inter/500.css";
 
-/* Valorex Design System - Minimal Black & White */
+/* Valorex Design System - Modern Cinema Theme */
 
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 0 0% 5%;
+    --foreground: 222 47% 11%;
 
-    --card: 0 0% 98%;
-    --card-foreground: 0 0% 5%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 5%;
+    --popover-foreground: 222 47% 11%;
 
-    --primary: 0 0% 5%;
+    --primary: 262 83% 58%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 5%;
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 222 47% 11%;
 
-    --muted: 0 0% 94%;
-    --muted-foreground: 0 0% 40%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 215 16% 47%;
 
-    --accent: 0 0% 92%;
-    --accent-foreground: 0 0% 5%;
+    --accent: 262 83% 58%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 0 0% 5%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 262 83% 58%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
     /* Custom Valorex tokens */
-    --valorex-badge: 0 72% 51%;
+    --valorex-badge: 142 76% 36%;
     --valorex-badge-foreground: 0 0% 100%;
-    --valorex-hover: 0 0% 96%;
-    --valorex-card-shadow: 0 4px 20px -4px hsl(0 0% 0% / 0.08);
-    --valorex-card-shadow-hover: 0 8px 30px -4px hsl(0 0% 0% / 0.15);
+    --valorex-hover: 220 14% 96%;
+    --valorex-gradient-start: 262 83% 58%;
+    --valorex-gradient-end: 280 87% 65%;
+    --valorex-card-shadow: 0 4px 24px -8px hsl(262 83% 58% / 0.12);
+    --valorex-card-shadow-hover: 0 12px 40px -8px hsl(262 83% 58% / 0.25);
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 0 0% 20%;
-    --sidebar-primary: 0 0% 5%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 262 83% 58%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 0% 94%;
-    --sidebar-accent-foreground: 0 0% 5%;
-    --sidebar-border: 0 0% 90%;
-    --sidebar-ring: 0 0% 5%;
+    --sidebar-accent: 220 14% 96%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 262 83% 58%;
   }
 
   .dark {
-    --background: 0 0% 5%;
-    --foreground: 0 0% 98%;
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
 
-    --card: 0 0% 8%;
-    --card-foreground: 0 0% 98%;
+    --card: 222 47% 9%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 0 0% 8%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 222 47% 9%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 5%;
+    --primary: 262 83% 65%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 12%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 222 47% 14%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 60%;
+    --muted: 222 47% 14%;
+    --muted-foreground: 215 20% 65%;
 
-    --accent: 0 0% 15%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 262 83% 65%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 62% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 18%;
-    --input: 0 0% 18%;
-    --ring: 0 0% 98%;
+    --border: 222 47% 18%;
+    --input: 222 47% 18%;
+    --ring: 262 83% 65%;
 
     /* Custom Valorex tokens - dark */
-    --valorex-badge: 0 72% 51%;
+    --valorex-badge: 142 76% 42%;
     --valorex-badge-foreground: 0 0% 100%;
-    --valorex-hover: 0 0% 12%;
-    --valorex-card-shadow: 0 4px 20px -4px hsl(0 0% 0% / 0.4);
-    --valorex-card-shadow-hover: 0 8px 30px -4px hsl(0 0% 0% / 0.6);
+    --valorex-hover: 222 47% 14%;
+    --valorex-gradient-start: 262 83% 65%;
+    --valorex-gradient-end: 280 87% 72%;
+    --valorex-card-shadow: 0 4px 24px -8px hsl(0 0% 0% / 0.5);
+    --valorex-card-shadow-hover: 0 12px 40px -8px hsl(262 83% 58% / 0.3);
 
-    --sidebar-background: 0 0% 8%;
-    --sidebar-foreground: 0 0% 90%;
-    --sidebar-primary: 0 0% 98%;
-    --sidebar-primary-foreground: 0 0% 5%;
-    --sidebar-accent: 0 0% 15%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 0 0% 18%;
-    --sidebar-ring: 0 0% 98%;
+    --sidebar-background: 222 47% 9%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 262 83% 65%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 222 47% 14%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 222 47% 18%;
+    --sidebar-ring: 262 83% 65%;
   }
 }
 
@@ -118,5 +122,15 @@
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-display;
+  }
+}
+
+@layer utilities {
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
+  }
+  
+  .glass-effect {
+    @apply bg-background/80 backdrop-blur-xl border border-border/50;
   }
 }
