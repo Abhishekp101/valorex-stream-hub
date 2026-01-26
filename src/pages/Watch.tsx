@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Film, Maximize2, Volume2, VolumeX, Play, Pause } from 'lucide-react';
+import { ArrowLeft, Film, Play, Keyboard } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { supabase } from '@/integrations/supabase/client';
 import Header from '@/components/Header';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+import VideoPlayer from '@/components/VideoPlayer';
 
 interface Movie {
   id: string;
@@ -165,21 +166,12 @@ const Watch = () => {
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1 }}
-          className="relative w-full rounded-2xl overflow-hidden border border-border bg-black shadow-2xl shadow-black/50"
         >
-          {/* Aspect Ratio Container */}
-          <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
-            <iframe
-              src={embedUrl}
-              className="absolute inset-0 w-full h-full"
-              allow="autoplay; encrypted-media; fullscreen"
-              allowFullScreen
-              title={`Watch ${movie.title}`}
-            />
-          </div>
-          
-          {/* Gradient overlay at bottom for controls visibility */}
-          <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
+          <VideoPlayer 
+            embedUrl={embedUrl} 
+            title={movie.title} 
+            posterUrl={movie.poster_url || undefined}
+          />
         </motion.div>
 
         {/* Movie Info Below Player */}
@@ -216,12 +208,18 @@ const Watch = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
-          className="mt-6 p-4 rounded-xl bg-primary/5 border border-primary/20"
+          className="mt-6 p-4 rounded-xl bg-secondary border border-border"
         >
           <div className="flex items-start gap-3">
-            <Maximize2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+            <Keyboard className="w-5 h-5 text-foreground flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm font-medium">Tip: Click the fullscreen button in the player for the best viewing experience</p>
+              <p className="text-sm font-medium mb-2">Keyboard Shortcuts</p>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs text-muted-foreground">
+                <span><kbd className="bg-muted px-1.5 py-0.5 rounded">F</kbd> Fullscreen</span>
+                <span><kbd className="bg-muted px-1.5 py-0.5 rounded">Space</kbd> Play/Pause</span>
+                <span><kbd className="bg-muted px-1.5 py-0.5 rounded">←</kbd> Rewind</span>
+                <span><kbd className="bg-muted px-1.5 py-0.5 rounded">→</kbd> Forward</span>
+              </div>
             </div>
           </div>
         </motion.div>
