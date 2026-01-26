@@ -17,6 +17,7 @@ interface Movie {
   info: string | null;
   poster_url: string | null;
   download_link: string | null;
+  video_link: string | null;
   category: string | null;
   language: string | null;
   quality: string | null;
@@ -232,19 +233,30 @@ const MovieDetails = () => {
               </div>
             )}
 
-            {/* Download Button */}
-            {movie.download_link && (
-              <a
-                href={movie.download_link}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button size="lg" className="gap-3 text-lg h-14 px-8 bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-opacity shadow-lg shadow-primary/30">
-                  <Download className="w-5 h-5" />
-                  Download Now
-                </Button>
-              </a>
-            )}
+            {/* Action Buttons */}
+            <div className="flex flex-wrap gap-4">
+              {movie.download_link && (
+                <a
+                  href={movie.download_link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button size="lg" className="gap-3 text-lg h-14 px-8 bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-opacity shadow-lg shadow-primary/30">
+                    <Download className="w-5 h-5" />
+                    Download Now
+                  </Button>
+                </a>
+              )}
+              
+              {movie.video_link && (
+                <Link to={`/watch/${movie.id}`}>
+                  <Button size="lg" variant="outline" className="gap-3 text-lg h-14 px-8 border-2 border-primary/50 hover:bg-primary/10 hover:border-primary transition-all">
+                    <Play className="w-5 h-5" />
+                    Play Online
+                  </Button>
+                </Link>
+              )}
+            </div>
 
             {/* Share Buttons */}
             <div className="pt-6 border-t border-border">

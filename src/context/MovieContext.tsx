@@ -34,6 +34,7 @@ export const MovieProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         quality: m.quality || '1080p',
         info: m.info || '',
         downloadLink: m.download_link || '',
+        videoLink: m.video_link || '',
       }));
       setMovies(mappedMovies);
     }
@@ -54,6 +55,7 @@ export const MovieProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       quality: movie.quality,
       info: movie.info,
       download_link: movie.downloadLink,
+      video_link: movie.videoLink || null,
     });
 
     if (!error) {

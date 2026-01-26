@@ -20,6 +20,7 @@ const MovieAdmin = () => {
     quality: 'WEB-DL',
     info: '',
     downloadLink: '',
+    videoLink: '',
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -49,6 +50,7 @@ const MovieAdmin = () => {
         quality: 'WEB-DL',
         info: '',
         downloadLink: '',
+        videoLink: '',
       });
     } catch (error: any) {
       toast({
@@ -204,6 +206,19 @@ const MovieAdmin = () => {
               placeholder="https://example.com/download"
               className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1.5">Video Link (Google Drive)</label>
+            <input
+              type="url"
+              name="videoLink"
+              value={formData.videoLink}
+              onChange={handleChange}
+              placeholder="https://drive.google.com/file/d/..."
+              className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            />
+            <p className="text-xs text-muted-foreground mt-1">Optional: Add a Google Drive video link for online streaming</p>
           </div>
 
           <button
