@@ -1,12 +1,13 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useMovies } from '@/context/MovieContext';
 import Header from '@/components/Header';
 import SearchFilters from '@/components/SearchFilters';
 import MovieCard from '@/components/MovieCard';
 import Pagination from '@/components/Pagination';
 import { CategoryFilter, LanguageFilter } from '@/types/movie';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Sparkles } from 'lucide-react';
 
 const MOVIES_PER_PAGE = 10;
 
@@ -46,19 +47,33 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
-      <main className="container py-8">
+      {/* Luxury Background Effect */}
+      <div className="absolute inset-x-0 top-16 h-96 overflow-hidden -z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-primary/5 blur-3xl animate-pulse" />
+        <div className="absolute top-1/3 right-1/4 w-80 h-80 rounded-full bg-accent/5 blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background" />
+      </div>
+      
+      <main className="container py-8 relative">
         {/* Hero Section */}
         <section className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
-            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            Latest Releases Available
-          </div>
-          <h1 className="font-display text-4xl md:text-6xl font-bold tracking-tight mb-4">
-            Download <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Premium</span> Movies
-          </h1>
-          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-            Your ultimate destination for the latest Hollywood & Bollywood blockbusters in stunning HD quality
-          </p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="relative"
+          >
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6 border border-primary/20 backdrop-blur-sm">
+              <Sparkles className="w-4 h-4" />
+              Premium Collection
+            </div>
+            <h1 className="font-display text-4xl md:text-6xl font-bold tracking-tight mb-4">
+              Stream <span className="bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">Premium</span> Movies
+            </h1>
+            <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+              Your exclusive gateway to the finest Hollywood & Bollywood cinema in stunning HD quality
+            </p>
+          </motion.div>
         </section>
 
         {/* Filters */}
