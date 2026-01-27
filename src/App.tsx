@@ -14,6 +14,7 @@ import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import MovieDetails from "./pages/MovieDetails";
 import Software from "./pages/Software";
+import SoftwareDetails from "./pages/SoftwareDetails";
 import Watch from "./pages/Watch";
 import NotFound from "./pages/NotFound";
 
@@ -38,6 +39,7 @@ const App = () => (
                   <Route path="/movie/:id" element={<MovieDetails />} />
                   <Route path="/watch/:id" element={<Watch />} />
                   <Route path="/software" element={<Software />} />
+                  <Route path="/software/:id" element={<SoftwareDetails />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
