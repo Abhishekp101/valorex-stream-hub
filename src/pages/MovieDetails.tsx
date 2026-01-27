@@ -243,7 +243,7 @@ const MovieDetails = () => {
                 >
                   <Button size="lg" className="gap-3 text-lg h-14 px-8 bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-opacity shadow-lg shadow-primary/30">
                     <Download className="w-5 h-5" />
-                    Download Now
+                    Get Premium Copy
                   </Button>
                 </a>
               )}
@@ -252,7 +252,7 @@ const MovieDetails = () => {
                 <Link to={`/watch/${movie.id}`}>
                   <Button size="lg" variant="outline" className="gap-3 text-lg h-14 px-8 border-2 border-primary/50 hover:bg-primary/10 hover:border-primary transition-all">
                     <Play className="w-5 h-5" />
-                    Play Online
+                    Stream in HD
                   </Button>
                 </Link>
               )}
