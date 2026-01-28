@@ -133,4 +133,76 @@
   .glass-effect {
     @apply bg-background/80 backdrop-blur-xl border border-border/50;
   }
+
+  /* 3D Card Effects */
+  .perspective-container {
+    perspective: 1000px;
+  }
+
+  .card-3d {
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+  }
+
+  .card-3d:hover {
+    transform: rotateY(-5deg) rotateX(5deg) translateZ(20px);
+    box-shadow: 
+      20px 20px 60px hsl(var(--primary) / 0.1),
+      -20px -20px 60px hsl(var(--background) / 0.5);
+  }
+
+  .card-3d-subtle {
+    transform-style: preserve-3d;
+    transition: transform 0.4s ease;
+  }
+
+  .card-3d-subtle:hover {
+    transform: translateY(-8px) rotateX(2deg) scale(1.02);
+  }
+
+  /* Luxury Glow */
+  .luxury-glow {
+    position: relative;
+  }
+
+  .luxury-glow::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.3), transparent, hsl(var(--accent) / 0.3));
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .luxury-glow:hover::before {
+    opacity: 1;
+  }
+
+  /* Shimmer Effect */
+  .shimmer-effect {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--background)) 0%,
+      hsl(var(--primary) / 0.1) 50%,
+      hsl(var(--background)) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
+  }
+
+  /* 3D Text Shadow */
+  .text-3d {
+    text-shadow: 
+      1px 1px 0 hsl(var(--primary) / 0.2),
+      2px 2px 0 hsl(var(--primary) / 0.15),
+      3px 3px 0 hsl(var(--primary) / 0.1),
+      4px 4px 8px hsl(var(--primary) / 0.05);
+  }
+
+  /* Floating Animation */
+  .float-3d {
+    animation: float 6s ease-in-out infinite;
+  }
 }

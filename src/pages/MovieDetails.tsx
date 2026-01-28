@@ -243,7 +243,7 @@ const MovieDetails = () => {
                 >
                   <Button size="lg" className="gap-3 text-lg h-14 px-8 bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-opacity shadow-lg shadow-primary/30">
                     <Download className="w-5 h-5" />
-                    Get Premium Copy
+                    Download Now
                   </Button>
                 </a>
               )}

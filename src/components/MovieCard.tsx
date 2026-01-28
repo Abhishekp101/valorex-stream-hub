@@ -14,10 +14,10 @@ const MovieCard = ({ movie, onClick, index }: MovieCardProps) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.05 }}
-      className="group cursor-pointer"
+      className="group cursor-pointer perspective-container"
       onClick={onClick}
     >
-      <div className="relative aspect-[2/3] overflow-hidden rounded-xl bg-muted shadow-valorex group-hover:shadow-valorex-hover transition-all duration-500">
+      <div className="relative aspect-[2/3] overflow-hidden rounded-xl bg-muted shadow-valorex card-3d-subtle luxury-glow transition-all duration-500">
         <img
           src={movie.poster}
           alt={movie.title}
