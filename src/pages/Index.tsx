@@ -44,35 +44,83 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-hidden">
       <Header />
       
-      {/* Luxury Background Effect */}
-      <div className="absolute inset-x-0 top-16 h-96 overflow-hidden -z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-primary/5 blur-3xl animate-pulse" />
-        <div className="absolute top-1/3 right-1/4 w-80 h-80 rounded-full bg-accent/5 blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+      {/* Luxury Background Effect with Floating Elements */}
+      <div className="absolute inset-x-0 top-16 h-[500px] overflow-hidden -z-10">
+        <div className="absolute inset-0 morph-bg" />
+        
+        {/* Floating 3D Orbs */}
+        <motion.div 
+          className="absolute top-20 left-[15%] w-72 h-72 rounded-full bg-gradient-to-br from-primary/10 to-transparent blur-3xl parallax-float-1"
+          animate={{ 
+            y: [0, -30, 0],
+            x: [0, 20, 0],
+            scale: [1, 1.1, 1],
+          }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div 
+          className="absolute top-40 right-[20%] w-96 h-96 rounded-full bg-gradient-to-bl from-accent/10 to-transparent blur-3xl parallax-float-2"
+          animate={{ 
+            y: [0, 40, 0],
+            x: [0, -30, 0],
+            scale: [1, 0.9, 1],
+          }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+        />
+        <motion.div 
+          className="absolute top-60 left-[40%] w-64 h-64 rounded-full bg-gradient-to-tr from-primary/5 to-accent/5 blur-2xl parallax-float-3"
+          animate={{ 
+            y: [0, -20, 0],
+            rotate: [0, 180, 360],
+          }}
+          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+        />
+        
+        {/* Grid Pattern Overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(hsl(var(--primary)/0.03)_1px,transparent_1px),linear-gradient(90deg,hsl(var(--primary)/0.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
+        
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/50 to-background" />
       </div>
       
       <main className="container py-8 relative">
-        {/* Hero Section */}
-        <section className="text-center mb-12">
+        {/* Hero Section with 3D Text */}
+        <section className="text-center mb-16">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="relative"
+            initial={{ opacity: 0, y: 40, rotateX: 20 }}
+            animate={{ opacity: 1, y: 0, rotateX: 0 }}
+            transition={{ duration: 0.8, type: "spring" }}
+            className="relative perspective-container"
           >
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6 border border-primary/20 backdrop-blur-sm animate-glow-pulse">
-              <Sparkles className="w-4 h-4" />
+            <motion.div 
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6 border border-primary/20 backdrop-blur-sm"
+              animate={{ boxShadow: ["0 0 20px hsl(var(--primary) / 0.3)", "0 0 40px hsl(var(--primary) / 0.5)", "0 0 20px hsl(var(--primary) / 0.3)"] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              <Sparkles className="w-4 h-4 animate-bounce-subtle" />
               Premium Collection
-            </div>
-            <h1 className="font-display text-4xl md:text-6xl font-bold tracking-tight mb-4 text-3d">
-              Download and Watch Online <span className="bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">Premium</span> Movies
+            </motion.div>
+            <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-3d-deep">
+              Download and Watch Online{' '}
+              <motion.span 
+                className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent bg-[size:200%_100%]"
+                animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+              >
+                Premium
+              </motion.span>{' '}
+              Movies
             </h1>
-            <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+            <motion.p 
+              className="text-muted-foreground max-w-2xl mx-auto text-lg md:text-xl"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
               Your exclusive gateway to the finest Hollywood & Bollywood cinema in stunning HD quality
-            </p>
+            </motion.p>
           </motion.div>
         </section>
 
@@ -88,20 +136,35 @@ const Index = () => {
           />
         </section>
 
-        {/* Results Count */}
-        <div className="mb-6">
-          <p className="text-sm text-muted-foreground">
-            Showing {paginatedMovies.length} of {filteredMovies.length} movies
+        {/* Results Count with Animation */}
+        <motion.div 
+          className="mb-8"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.4 }}
+        >
+          <p className="text-sm text-muted-foreground glass-premium inline-flex px-4 py-2 rounded-full">
+            Showing <span className="font-semibold text-foreground mx-1">{paginatedMovies.length}</span> of <span className="font-semibold text-foreground mx-1">{filteredMovies.length}</span> movies
           </p>
-        </div>
+        </motion.div>
 
         {/* Loading State */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            >
+              <Loader2 className="w-10 h-10 text-primary" />
+            </motion.div>
           </div>
         ) : paginatedMovies.length > 0 ? (
-          <section className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+          <motion.section 
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 md:gap-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
             {paginatedMovies.map((movie, index) => (
               <Link to={`/movie/${movie.id}`} key={movie.id}>
                 <MovieCard
@@ -111,11 +174,15 @@ const Index = () => {
                 />
               </Link>
             ))}
-          </section>
+          </motion.section>
         ) : (
-          <div className="text-center py-20">
+          <motion.div 
+            className="text-center py-20"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+          >
             <p className="text-muted-foreground text-lg">No movies found matching your criteria</p>
-          </div>
+          </motion.div>
         )}
 
         {/* Pagination */}
