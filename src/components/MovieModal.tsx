@@ -29,24 +29,29 @@ const MovieModal = ({ movie, onClose }: MovieModalProps) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-primary/60 backdrop-blur-sm"
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-primary/60 backdrop-blur-md"
         onClick={onClose}
       >
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          transition={{ duration: 0.2 }}
-          className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-background rounded-xl shadow-2xl"
+          initial={{ opacity: 0, scale: 0.8, rotateX: 20, y: 50 }}
+          animate={{ opacity: 1, scale: 1, rotateX: 0, y: 0 }}
+          exit={{ opacity: 0, scale: 0.8, rotateX: -20, y: 50 }}
+          transition={{ type: "spring", stiffness: 200, damping: 20 }}
+          className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-background rounded-2xl shadow-2xl perspective-container gradient-border"
           onClick={(e) => e.stopPropagation()}
         >
-          <button
+          {/* Glow Effect */}
+          <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 rounded-2xl blur-xl opacity-50 -z-10" />
+          
+          <motion.button
             onClick={onClose}
-            className="absolute top-4 right-4 z-10 p-2 rounded-full bg-background/80 hover:bg-secondary transition-colors"
+            className="absolute top-4 right-4 z-10 p-2 rounded-full bg-background/80 hover:bg-secondary transition-colors neon-glow"
             aria-label="Close modal"
+            whileHover={{ scale: 1.1, rotate: 90 }}
+            whileTap={{ scale: 0.9 }}
           >
             <X className="w-5 h-5" />
-          </button>
+          </motion.button>
 
           <div className="flex flex-col md:flex-row">
             <div className="w-full md:w-2/5 flex-shrink-0">
@@ -94,15 +99,17 @@ const MovieModal = ({ movie, onClose }: MovieModalProps) => {
                 </p>
               </div>
 
-              <a
+              <motion.a
                 href={movie.downloadLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 font-display font-semibold text-sm rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
+                className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 font-display font-semibold text-sm rounded-lg bg-primary text-primary-foreground hover:opacity-90 transition-all shine-effect neon-glow"
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
               >
                 <Download className="w-5 h-5" />
                 Download Now
-              </a>
+              </motion.a>
             </div>
           </div>
         </motion.div>

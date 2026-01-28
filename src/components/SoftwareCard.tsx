@@ -49,23 +49,39 @@ const SoftwareCard = ({ item, index, onClick }: SoftwareCardProps) => {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.05 }}
+      initial={{ opacity: 0, y: 30, rotateX: 10 }}
+      animate={{ opacity: 1, y: 0, rotateX: 0 }}
+      transition={{ delay: index * 0.08, type: "spring", stiffness: 100 }}
+      whileHover={{ y: -8, scale: 1.02 }}
       onClick={onClick}
-      className="group relative overflow-hidden rounded-2xl border border-border bg-card cursor-pointer transition-all duration-500 hover:border-primary/50 hover:shadow-valorex-hover perspective-container"
+      className="group relative overflow-hidden rounded-2xl border border-border bg-card cursor-pointer transition-all duration-500 hover:border-primary/50 perspective-container gradient-border shine-effect"
     >
       {/* Luxury Glow Effect */}
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10" />
       </div>
 
+      {/* Animated Background Pattern */}
+      <motion.div 
+        className="absolute inset-0 bg-[linear-gradient(45deg,hsl(var(--primary)/0.02)_25%,transparent_25%,transparent_75%,hsl(var(--primary)/0.02)_75%)] bg-[size:20px_20px] opacity-0 group-hover:opacity-100 transition-opacity"
+        animate={{ backgroundPosition: ["0 0", "20px 20px"] }}
+        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+      />
+
       {/* Content */}
-      <div className="relative p-5 flex items-center gap-4 card-3d-subtle">
+      <div className="relative p-5 flex items-center gap-4">
         {/* Icon with Luxury Border */}
         <div className="relative flex-shrink-0">
-          <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
-          <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-secondary border-2 border-border group-hover:border-primary/30 transition-all shadow-lg group-hover:shadow-xl group-hover:shadow-primary/20">
+          <motion.div 
+            className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/30 to-accent/30 blur-xl opacity-0 group-hover:opacity-100 transition-opacity"
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
+          <motion.div 
+            className="relative w-16 h-16 rounded-xl overflow-hidden bg-secondary border-2 border-border group-hover:border-primary/50 transition-all shadow-lg"
+            whileHover={{ rotate: [0, -5, 5, 0], scale: 1.1 }}
+            transition={{ duration: 0.5 }}
+          >
             {item.icon_url ? (
               <img
                 src={item.icon_url}
@@ -77,9 +93,14 @@ const SoftwareCard = ({ item, index, onClick }: SoftwareCardProps) => {
                 {platformIcons[item.platform]}
               </div>
             )}
-          </div>
+          </motion.div>
           {/* Sparkle Accent */}
-          <Sparkles className="absolute -top-1 -right-1 w-4 h-4 text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+          <motion.div
+            animate={{ rotate: 360, scale: [1, 1.2, 1] }}
+            transition={{ duration: 3, repeat: Infinity }}
+          >
+            <Sparkles className="absolute -top-1 -right-1 w-4 h-4 text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+          </motion.div>
         </div>
 
         {/* Info */}
@@ -107,7 +128,10 @@ const SoftwareCard = ({ item, index, onClick }: SoftwareCardProps) => {
 
         {/* Stats & Arrow */}
         <div className="hidden sm:flex items-center gap-6">
-          <div className="text-center">
+          <motion.div 
+            className="text-center"
+            whileHover={{ scale: 1.1 }}
+          >
             <div className="flex items-center gap-1.5 text-muted-foreground">
               <Download className="w-4 h-4" />
               <span className="font-semibold text-foreground">
@@ -115,14 +139,18 @@ const SoftwareCard = ({ item, index, onClick }: SoftwareCardProps) => {
               </span>
             </div>
             <span className="text-xs text-muted-foreground">Downloads</span>
-          </div>
+          </motion.div>
 
-          {/* Arrow Indicator */}
-          <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
+          {/* Arrow Indicator with Animation */}
+          <motion.div 
+            className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300 neon-glow"
+            whileHover={{ scale: 1.2, rotate: 90 }}
+            transition={{ type: "spring", stiffness: 400 }}
+          >
             <svg className="w-4 h-4 transform group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
-          </div>
+          </motion.div>
         </div>
       </div>
     </motion.div>

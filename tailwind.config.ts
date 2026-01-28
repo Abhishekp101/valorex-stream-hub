@@ -101,6 +101,39 @@ export default {
           "0%": { backgroundPosition: "-200% 0" },
           "100%": { backgroundPosition: "200% 0" },
         },
+        "spin-slow": {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
+        "bounce-subtle": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-5px)" },
+        },
+        "scale-pulse": {
+          "0%, 100%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.05)" },
+        },
+        "tilt-shake": {
+          "0%, 100%": { transform: "rotateZ(0deg)" },
+          "25%": { transform: "rotateZ(-2deg)" },
+          "75%": { transform: "rotateZ(2deg)" },
+        },
+        "gradient-shift": {
+          "0%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+          "100%": { backgroundPosition: "0% 50%" },
+        },
+        "float-3d": {
+          "0%": { transform: "translateY(0) rotateX(0) rotateY(0)" },
+          "25%": { transform: "translateY(-5px) rotateX(2deg) rotateY(2deg)" },
+          "50%": { transform: "translateY(-10px) rotateX(0) rotateY(0)" },
+          "75%": { transform: "translateY(-5px) rotateX(-2deg) rotateY(-2deg)" },
+          "100%": { transform: "translateY(0) rotateX(0) rotateY(0)" },
+        },
+        "ripple": {
+          "0%": { transform: "scale(0)", opacity: "1" },
+          "100%": { transform: "scale(4)", opacity: "0" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -109,6 +142,13 @@ export default {
         "float": "float 6s ease-in-out infinite",
         "glow-pulse": "glow-pulse 3s ease-in-out infinite",
         "shimmer": "shimmer 2s linear infinite",
+        "spin-slow": "spin-slow 20s linear infinite",
+        "bounce-subtle": "bounce-subtle 2s ease-in-out infinite",
+        "scale-pulse": "scale-pulse 2s ease-in-out infinite",
+        "tilt-shake": "tilt-shake 3s ease-in-out infinite",
+        "gradient-shift": "gradient-shift 8s ease infinite",
+        "float-3d": "float-3d 8s ease-in-out infinite",
+        "ripple": "ripple 0.6s linear",
       },
     },
   },
