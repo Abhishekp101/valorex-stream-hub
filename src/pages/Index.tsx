@@ -63,12 +63,12 @@ const Index = () => {
             animate={{ opacity: 1, y: 0 }}
             className="relative"
           >
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6 border border-primary/20 backdrop-blur-sm">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6 border border-primary/20 backdrop-blur-sm animate-glow-pulse">
               <Sparkles className="w-4 h-4" />
               Premium Collection
             </div>
-            <h1 className="font-display text-4xl md:text-6xl font-bold tracking-tight mb-4">
-              Stream <span className="bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">Premium</span> Movies
+            <h1 className="font-display text-4xl md:text-6xl font-bold tracking-tight mb-4 text-3d">
+              Download and Watch Online <span className="bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">Premium</span> Movies
             </h1>
             <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
               Your exclusive gateway to the finest Hollywood & Bollywood cinema in stunning HD quality

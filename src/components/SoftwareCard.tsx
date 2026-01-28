@@ -53,7 +53,7 @@ const SoftwareCard = ({ item, index, onClick }: SoftwareCardProps) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
       onClick={onClick}
-      className="group relative overflow-hidden rounded-2xl border border-border bg-card cursor-pointer transition-all duration-500 hover:border-primary/50 hover:shadow-valorex-hover"
+      className="group relative overflow-hidden rounded-2xl border border-border bg-card cursor-pointer transition-all duration-500 hover:border-primary/50 hover:shadow-valorex-hover perspective-container"
     >
       {/* Luxury Glow Effect */}
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
@@ -61,11 +61,11 @@ const SoftwareCard = ({ item, index, onClick }: SoftwareCardProps) => {
       </div>
 
       {/* Content */}
-      <div className="relative p-5 flex items-center gap-4">
+      <div className="relative p-5 flex items-center gap-4 card-3d-subtle">
         {/* Icon with Luxury Border */}
         <div className="relative flex-shrink-0">
           <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
-          <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-secondary border-2 border-border group-hover:border-primary/30 transition-colors shadow-lg">
+          <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-secondary border-2 border-border group-hover:border-primary/30 transition-all shadow-lg group-hover:shadow-xl group-hover:shadow-primary/20">
             {item.icon_url ? (
               <img
                 src={item.icon_url}
