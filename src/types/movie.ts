@@ -9,6 +9,7 @@ export interface Movie {
   info: string;
   downloadLink: string;
   videoLink?: string;
+  isFeatured?: boolean;
 }
 
 export type CategoryFilter = 'all' | 'hollywood' | 'bollywood';

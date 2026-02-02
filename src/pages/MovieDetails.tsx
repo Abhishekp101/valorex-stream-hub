@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Download, Calendar, Film, Star, Clock, Globe, Play, Sparkles } from 'lucide-react';
+import { Download, Calendar, Film, Star, Clock, Globe, Play, Plus, Share2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { supabase } from '@/integrations/supabase/client';
 import Header from '@/components/Header';
-import ShareButtons from '@/components/ShareButtons';
-import MovieCard from '@/components/MovieCard';
+import HorizontalMovieCard from '@/components/HorizontalMovieCard';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Movie } from '@/types/movie';
 
-interface Movie {
+interface MovieDB {
   id: string;
   title: string;
   release_date: string | null;
@@ -26,7 +26,7 @@ interface Movie {
 
 const MovieDetails = () => {
   const { id } = useParams<{ id: string }>();
-  const [movie, setMovie] = useState<Movie | null>(null);
+  const [movie, setMovie] = useState<MovieDB | null>(null);
   const [relatedMovies, setRelatedMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -51,10 +51,22 @@ const MovieDetails = () => {
           .select('*')
           .eq('category', movieData.category)
           .neq('id', id)
-          .limit(5);
+          .limit(10);
         
         if (relatedData) {
-          setRelatedMovies(relatedData);
+          const mapped: Movie[] = relatedData.map((m) => ({
+            id: m.id,
+            title: m.title,
+            poster: m.poster_url || '',
+            date: m.release_date || '',
+            category: (m.category as 'hollywood' | 'bollywood') || 'hollywood',
+            language: (m.language as 'english' | 'hindi' | 'dual') || 'english',
+            quality: m.quality || '1080p',
+            info: m.info || '',
+            downloadLink: m.download_link || '',
+            videoLink: m.video_link || '',
+          }));
+          setRelatedMovies(mapped);
         }
       }
       
@@ -69,17 +81,9 @@ const MovieDetails = () => {
     return (
       <div className="min-h-screen bg-background">
         <Header />
-        <main className="container py-8">
-          <div className="grid lg:grid-cols-[350px_1fr] gap-10">
-            <Skeleton className="aspect-[2/3] rounded-2xl" />
-            <div className="space-y-6">
-              <Skeleton className="h-12 w-3/4" />
-              <Skeleton className="h-6 w-1/2" />
-              <Skeleton className="h-40 w-full" />
-              <Skeleton className="h-14 w-48" />
-            </div>
-          </div>
-        </main>
+        <div className="relative w-screen -ml-[calc((100vw-100%)/2)] h-[70vh]">
+          <Skeleton className="w-full h-full" />
+        </div>
       </div>
     );
   }
@@ -97,7 +101,6 @@ const MovieDetails = () => {
             <p className="text-muted-foreground mb-8">The movie you're looking for doesn't exist or has been removed.</p>
             <Link to="/">
               <Button size="lg" className="gap-2">
-                <ArrowLeft className="w-4 h-4" />
                 Back to Home
               </Button>
             </Link>
@@ -111,195 +114,200 @@ const MovieDetails = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
-      {/* Hero Background */}
-      <div className="absolute inset-x-0 top-16 h-80 overflow-hidden -z-10">
+      {/* Full-Screen Hero Background */}
+      <div className="relative w-screen -ml-[calc((100vw-100%)/2)] h-[80vh] md:h-[85vh] overflow-hidden">
         {movie.poster_url && (
           <>
-            <img
+            <motion.img
+              initial={{ scale: 1.05, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.7 }}
               src={movie.poster_url}
-              alt=""
-              className="w-full h-full object-cover blur-3xl opacity-30 scale-110"
+              alt={movie.title}
+              className="w-full h-full object-cover object-top"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-background/50 via-background/80 to-background" />
+            {/* Gradient Overlays */}
+            <div className="absolute inset-0 bg-gradient-to-r from-background via-background/60 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/30" />
           </>
         )}
-      </div>
-      
-      <main className="container py-8">
-        {/* Back Button */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-        >
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8 group"
-          >
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            Back to Movies
-          </Link>
-        </motion.div>
 
-        {/* Movie Details */}
-        <div className="grid lg:grid-cols-[350px_1fr] gap-10 mb-16">
-          {/* Poster */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="relative"
-          >
-            <div className="aspect-[2/3] rounded-2xl overflow-hidden border border-border shadow-valorex-hover">
-              {movie.poster_url ? (
-                <img
-                  src={movie.poster_url}
-                  alt={movie.title}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full bg-secondary flex items-center justify-center">
-                  <Film className="w-20 h-20 text-muted-foreground" />
-                </div>
-              )}
-            </div>
-            
-            {/* Floating Quality Badge */}
-            {movie.quality && (
-              <div className="absolute -top-3 -right-3 px-4 py-2 rounded-xl bg-gradient-to-r from-primary to-accent text-primary-foreground font-bold text-sm shadow-lg shadow-primary/30">
-                {movie.quality}
-              </div>
-            )}
-          </motion.div>
-
-          {/* Info */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="space-y-6"
-          >
-            {/* Title */}
-            <div>
-              <h1 className="font-display text-3xl md:text-5xl font-bold mb-4 leading-tight">
+        {/* Content Overlay */}
+        <div className="absolute inset-0 flex items-end pb-16 md:pb-20">
+          <div className="container">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="max-w-2xl space-y-4"
+            >
+              {/* Title */}
+              <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
                 {movie.title}
               </h1>
-              
-              {/* Badges */}
-              <div className="flex flex-wrap items-center gap-2 mb-6">
-                {movie.category && (
-                  <Badge variant="secondary" className="capitalize text-sm px-3 py-1">
-                    {movie.category}
-                  </Badge>
-                )}
-                {movie.language && (
-                  <Badge variant="outline" className="capitalize text-sm px-3 py-1 gap-1">
-                    <Globe className="w-3 h-3" />
-                    {movie.language}
-                  </Badge>
-                )}
-              </div>
+
+              {/* Description */}
+              <p className="text-muted-foreground line-clamp-3 text-base md:text-lg max-w-xl">
+                {movie.info || "Experience an unforgettable cinematic journey with stunning visuals and captivating storytelling."}
+              </p>
 
               {/* Meta Info */}
-              <div className="flex flex-wrap items-center gap-4 text-muted-foreground">
-                {movie.release_date && (
-                  <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4" />
-                    <span>{movie.release_date}</span>
-                  </div>
-                )}
-                <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-3 text-sm">
+                <span className="flex items-center gap-1.5">
+                  <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+                  <span className="text-foreground font-medium">4.5</span>
+                </span>
+                <span className="flex items-center gap-1.5 text-muted-foreground">
                   <Clock className="w-4 h-4" />
-                  <span>2h 30m</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  {[1,2,3,4,5].map((i) => (
-                    <Star key={i} className={`w-4 h-4 ${i <= 4 ? 'text-amber-400 fill-amber-400' : 'text-muted-foreground/30'}`} />
-                  ))}
-                  <span className="ml-1">4.5</span>
-                </div>
+                  2h 30m
+                </span>
+                {movie.release_date && (
+                  <span className="flex items-center gap-1.5 text-muted-foreground">
+                    <Calendar className="w-4 h-4" />
+                    {movie.release_date}
+                  </span>
+                )}
+                <span className="px-2.5 py-1 rounded-md bg-primary text-primary-foreground text-xs font-bold">
+                  {movie.quality || 'HD'}
+                </span>
+                {movie.language && (
+                  <span className="px-2.5 py-1 rounded-md bg-secondary text-secondary-foreground text-xs font-medium capitalize">
+                    {movie.language}
+                  </span>
+                )}
               </div>
-            </div>
 
-            {/* Description */}
-            {movie.info && (
-              <div className="p-6 rounded-xl bg-card border border-border">
-                <h2 className="font-semibold text-lg mb-3 flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-primary" />
-                  Synopsis
-                </h2>
-                <p className="text-muted-foreground leading-relaxed text-lg">
-                  {movie.info}
-                </p>
+              {/* Genre Tags */}
+              <div className="flex items-center gap-2 flex-wrap">
+                {['Action', 'Drama', 'Thriller'].map((genre, i) => (
+                  <span 
+                    key={genre}
+                    className="text-sm text-foreground underline underline-offset-4 hover:text-primary cursor-pointer transition-colors"
+                  >
+                    {genre}
+                    {i < 2 && <span className="text-muted-foreground ml-2">•</span>}
+                  </span>
+                ))}
               </div>
-            )}
 
-            {/* Action Buttons */}
-            <div className="flex flex-wrap gap-4">
-              {movie.download_link && (
-                <a
-                  href={movie.download_link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button size="lg" className="gap-3 text-lg h-14 px-8 bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-opacity shadow-lg shadow-primary/30">
-                    <Download className="w-5 h-5" />
-                    Download Now
-                  </Button>
-                </a>
-              )}
-              
-              {movie.video_link && (
-                <Link to={`/watch/${movie.id}`}>
-                  <Button size="lg" variant="outline" className="gap-3 text-lg h-14 px-8 border-2 border-primary/50 hover:bg-primary/10 hover:border-primary transition-all">
-                    <Play className="w-5 h-5" />
-                    Stream in HD
-                  </Button>
-                </Link>
-              )}
-            </div>
-
-            {/* Share Buttons */}
-            <div className="pt-6 border-t border-border">
-              <ShareButtons title={`Download ${movie.title} - Valorex`} />
-            </div>
-          </motion.div>
+              {/* Action Buttons */}
+              <div className="flex items-center gap-3 pt-2">
+                {movie.video_link ? (
+                  <Link to={`/watch/${movie.id}`}>
+                    <Button size="lg" className="gap-2 h-12 px-6 text-base">
+                      <Play className="w-5 h-5" fill="currentColor" />
+                      Play
+                    </Button>
+                  </Link>
+                ) : movie.download_link ? (
+                  <a href={movie.download_link} target="_blank" rel="noopener noreferrer">
+                    <Button size="lg" className="gap-2 h-12 px-6 text-base">
+                      <Play className="w-5 h-5" fill="currentColor" />
+                      Play
+                    </Button>
+                  </a>
+                ) : null}
+                
+                <Button size="icon" variant="secondary" className="h-12 w-12 rounded-full bg-secondary/80 backdrop-blur-sm hover:bg-secondary">
+                  <Plus className="w-5 h-5" />
+                </Button>
+                
+                <Button size="icon" variant="secondary" className="h-12 w-12 rounded-full bg-secondary/80 backdrop-blur-sm hover:bg-secondary">
+                  <Share2 className="w-5 h-5" />
+                </Button>
+                
+                {movie.download_link && (
+                  <a href={movie.download_link} target="_blank" rel="noopener noreferrer">
+                    <Button size="icon" variant="outline" className="h-12 w-12 rounded-full backdrop-blur-sm">
+                      <Download className="w-5 h-5" />
+                    </Button>
+                  </a>
+                )}
+              </div>
+            </motion.div>
+          </div>
         </div>
+      </div>
 
-        {/* Related Movies */}
-        {relatedMovies.length > 0 && (
-          <motion.section
-            initial={{ opacity: 0, y: 20 }}
+      {/* Tabs Section */}
+      <div className="container py-8">
+        {/* Language Badge */}
+        {movie.language && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
+            transition={{ delay: 0.5 }}
+            className="mb-6"
           >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-1.5 h-8 rounded-full bg-gradient-to-b from-primary to-accent" />
-              <h2 className="font-display text-2xl font-bold">Related Movies</h2>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
-              {relatedMovies.map((relatedMovie, index) => (
-                <Link to={`/movie/${relatedMovie.id}`} key={relatedMovie.id}>
-                  <MovieCard
-                    movie={{
-                      id: relatedMovie.id,
-                      title: relatedMovie.title,
-                      date: relatedMovie.release_date || '',
-                      info: relatedMovie.info || '',
-                      poster: relatedMovie.poster_url || '',
-                      downloadLink: relatedMovie.download_link || '',
-                      category: (relatedMovie.category as 'hollywood' | 'bollywood') || 'hollywood',
-                      language: (relatedMovie.language as 'english' | 'hindi' | 'dual') || 'english',
-                      quality: relatedMovie.quality || '1080p',
-                    }}
-                    index={index}
-                    onClick={() => {}}
-                  />
-                </Link>
-              ))}
-            </div>
-          </motion.section>
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary text-foreground text-sm font-medium capitalize">
+              <Globe className="w-4 h-4" />
+              {movie.language}
+            </span>
+          </motion.div>
         )}
-      </main>
+
+        <Tabs defaultValue="related" className="w-full">
+          <TabsList className="bg-transparent border-b border-border rounded-none w-full justify-start h-auto p-0 gap-6">
+            <TabsTrigger 
+              value="related"
+              className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-0 pb-3 text-base"
+            >
+              Related
+            </TabsTrigger>
+            <TabsTrigger 
+              value="details"
+              className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-0 pb-3 text-base"
+            >
+              Details
+            </TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="related" className="mt-6">
+            {relatedMovies.length > 0 ? (
+              <div className="overflow-x-auto scrollbar-hide -mx-4">
+                <div className="flex gap-4 px-4 pb-4">
+                  {relatedMovies.map((relatedMovie, index) => (
+                    <Link to={`/movie/${relatedMovie.id}`} key={relatedMovie.id}>
+                      <HorizontalMovieCard movie={relatedMovie} index={index} />
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <p className="text-muted-foreground text-center py-12">No related movies found</p>
+            )}
+          </TabsContent>
+          
+          <TabsContent value="details" className="mt-6">
+            <div className="grid md:grid-cols-2 gap-6 max-w-2xl">
+              <div className="space-y-4">
+                <div>
+                  <span className="text-muted-foreground text-sm">Title</span>
+                  <p className="font-medium">{movie.title}</p>
+                </div>
+                <div>
+                  <span className="text-muted-foreground text-sm">Release Date</span>
+                  <p className="font-medium">{movie.release_date || 'N/A'}</p>
+                </div>
+                <div>
+                  <span className="text-muted-foreground text-sm">Category</span>
+                  <p className="font-medium capitalize">{movie.category || 'N/A'}</p>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <span className="text-muted-foreground text-sm">Language</span>
+                  <p className="font-medium capitalize">{movie.language || 'N/A'}</p>
+                </div>
+                <div>
+                  <span className="text-muted-foreground text-sm">Quality</span>
+                  <p className="font-medium">{movie.quality || 'N/A'}</p>
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 };

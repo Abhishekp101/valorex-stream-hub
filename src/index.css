@@ -376,4 +376,45 @@
     border-image: linear-gradient(var(--angle), hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary))) 1;
     animation: spin-slow 8s linear infinite;
   }
+
+  /* Hide Scrollbar */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(2deg); }
+}
+
+@keyframes float-3d {
+  0%, 100% { transform: translateY(0) translateZ(0) rotateY(0deg); }
+  25% { transform: translateY(-15px) translateZ(20px) rotateY(5deg); }
+  50% { transform: translateY(-5px) translateZ(10px) rotateY(0deg); }
+  75% { transform: translateY(-20px) translateZ(30px) rotateY(-5deg); }
+}
+
+@keyframes ripple {
+  to { transform: translate(-50%, -50%) scale(4); opacity: 0; }
+}
+
+@keyframes spin-slow {
+  from { --angle: 0deg; }
+  to { --angle: 360deg; }
 }
