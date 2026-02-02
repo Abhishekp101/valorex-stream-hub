@@ -51,6 +51,7 @@ export type Database = {
           download_link: string | null
           id: string
           info: string | null
+          is_featured: boolean | null
           language: string | null
           poster_url: string | null
           quality: string | null
@@ -65,6 +66,7 @@ export type Database = {
           download_link?: string | null
           id?: string
           info?: string | null
+          is_featured?: boolean | null
           language?: string | null
           poster_url?: string | null
           quality?: string | null
@@ -79,6 +81,7 @@ export type Database = {
           download_link?: string | null
           id?: string
           info?: string | null
+          is_featured?: boolean | null
           language?: string | null
           poster_url?: string | null
           quality?: string | null

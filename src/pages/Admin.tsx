@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
-import { ArrowLeft, Film, FileText, Package, LogOut, Loader2 } from 'lucide-react';
+import { ArrowLeft, Film, FileText, Package, LogOut, Loader2, Layers } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import ThemeToggle from '@/components/ThemeToggle';
 import MovieAdmin from '@/components/admin/MovieAdmin';
 import BlogAdmin from '@/components/admin/BlogAdmin';
 import SoftwareAdmin from '@/components/admin/SoftwareAdmin';
+import SliderAdmin from '@/components/admin/SliderAdmin';
 import { Button } from '@/components/ui/button';
 
-type AdminTab = 'movies' | 'blog' | 'software';
+type AdminTab = 'movies' | 'slider' | 'blog' | 'software';
 
 const Admin = () => {
   const { user, isAdmin, loading, signOut } = useAuth();
@@ -25,6 +26,13 @@ const Admin = () => {
   if (!user) {
     return <Navigate to="/login" replace />;
   }
+
+  const tabs = [
+    { id: 'movies' as const, label: 'Movies', icon: Film },
+    { id: 'slider' as const, label: 'Slider', icon: Layers },
+    { id: 'blog' as const, label: 'Blog', icon: FileText },
+    { id: 'software' as const, label: 'Software', icon: Package },
+  ];
 
   return (
     <div className="min-h-screen bg-background">
@@ -63,44 +71,26 @@ const Admin = () => {
 
       <main className="container py-8">
         {/* Tab Switcher */}
-        <div className="flex items-center gap-2 p-1 mb-8 w-fit rounded-lg bg-secondary">
-          <button
-            onClick={() => setActiveTab('movies')}
-            className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-md transition-all ${
-              activeTab === 'movies'
-                ? 'bg-background text-foreground shadow-sm'
-                : 'text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            <Film className="w-4 h-4" />
-            Movies
-          </button>
-          <button
-            onClick={() => setActiveTab('blog')}
-            className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-md transition-all ${
-              activeTab === 'blog'
-                ? 'bg-background text-foreground shadow-sm'
-                : 'text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            <FileText className="w-4 h-4" />
-            Blog
-          </button>
-          <button
-            onClick={() => setActiveTab('software')}
-            className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-md transition-all ${
-              activeTab === 'software'
-                ? 'bg-background text-foreground shadow-sm'
-                : 'text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            <Package className="w-4 h-4" />
-            Software
-          </button>
+        <div className="flex items-center gap-2 p-1 mb-8 w-fit rounded-lg bg-secondary overflow-x-auto">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-md transition-all whitespace-nowrap ${
+                activeTab === tab.id
+                  ? 'bg-background text-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              <tab.icon className="w-4 h-4" />
+              {tab.label}
+            </button>
+          ))}
         </div>
 
         {/* Content */}
         {activeTab === 'movies' && <MovieAdmin />}
+        {activeTab === 'slider' && <SliderAdmin />}
         {activeTab === 'blog' && <BlogAdmin />}
         {activeTab === 'software' && <SoftwareAdmin />}
       </main>
