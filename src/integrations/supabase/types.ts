@@ -44,6 +44,36 @@ export type Database = {
         }
         Relationships: []
       }
+      movie_requests: {
+        Row: {
+          created_at: string
+          id: string
+          language: string
+          movie_name: string
+          status: string
+          updated_at: string
+          whatsapp_number: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          language: string
+          movie_name: string
+          status?: string
+          updated_at?: string
+          whatsapp_number?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          language?: string
+          movie_name?: string
+          status?: string
+          updated_at?: string
+          whatsapp_number?: string | null
+        }
+        Relationships: []
+      }
       movies: {
         Row: {
           category: string | null

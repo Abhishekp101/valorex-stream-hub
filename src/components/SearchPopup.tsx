@@ -57,25 +57,25 @@ const SearchPopup = ({ isOpen, onClose }: SearchPopupProps) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -50 }}
             transition={{ type: "spring", damping: 25 }}
-            className="fixed top-0 left-0 right-0 z-50 p-4 md:p-8"
+            className="fixed top-0 left-0 right-0 z-50 p-3 sm:p-4 md:p-8"
           >
             <div className="max-w-3xl mx-auto">
               {/* Search Input */}
               <div className="relative">
-                <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-6 h-6 text-muted-foreground" />
+                <Search className="absolute left-4 sm:left-5 top-1/2 -translate-y-1/2 w-5 h-5 sm:w-6 sm:h-6 text-muted-foreground" />
                 <input
                   ref={inputRef}
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search movies, shows..."
-                  className="w-full pl-14 pr-14 py-5 text-xl rounded-2xl border-2 border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
+                  placeholder="Search movies..."
+                  className="w-full pl-11 sm:pl-14 pr-11 sm:pr-14 py-4 sm:py-5 text-base sm:text-xl rounded-xl sm:rounded-2xl border-2 border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors"
                 />
                 <button
                   onClick={onClose}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                  className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 p-1.5 sm:p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
                 >
-                  <X className="w-6 h-6" />
+                  <X className="w-5 h-5 sm:w-6 sm:h-6" />
                 </button>
               </div>
 
@@ -84,7 +84,7 @@ const SearchPopup = ({ isOpen, onClose }: SearchPopupProps) => {
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-4 rounded-2xl border border-border bg-card overflow-hidden"
+                  className="mt-3 sm:mt-4 rounded-xl sm:rounded-2xl border border-border bg-card overflow-hidden max-h-[60vh] overflow-y-auto"
                 >
                   {filteredMovies.length > 0 ? (
                     <div className="divide-y divide-border">
@@ -93,16 +93,16 @@ const SearchPopup = ({ isOpen, onClose }: SearchPopupProps) => {
                           key={movie.id}
                           to={`/movie/${movie.id}`}
                           onClick={onClose}
-                          className="flex items-center gap-4 p-4 hover:bg-secondary/50 transition-colors"
+                          className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 hover:bg-secondary/50 transition-colors"
                         >
                           <img
                             src={movie.poster}
                             alt={movie.title}
-                            className="w-16 h-10 object-cover rounded-lg"
+                            className="w-14 h-9 sm:w-16 sm:h-10 object-cover rounded-md sm:rounded-lg flex-shrink-0"
                           />
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-medium truncate">{movie.title}</h4>
-                            <p className="text-sm text-muted-foreground capitalize">
+                            <h4 className="font-medium truncate text-sm sm:text-base">{movie.title}</h4>
+                            <p className="text-xs sm:text-sm text-muted-foreground capitalize">
                               {movie.category} • {movie.language} • {movie.quality}
                             </p>
                           </div>

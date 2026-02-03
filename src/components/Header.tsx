@@ -31,18 +31,18 @@ const Header = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ type: "spring", stiffness: 100 }}
       >
-        <div className="container flex h-16 items-center justify-between">
+        <div className="flex h-14 sm:h-16 items-center justify-between px-4 sm:px-6 md:px-8 lg:px-12">
           {/* Logo */}
           <Link to="/" className="flex items-center">
             <AnimatedLogo />
           </Link>
 
           {/* Right Side Actions */}
-          <nav className="flex items-center gap-2">
+          <nav className="flex items-center gap-1 sm:gap-2">
             {/* Search Icon */}
             <motion.button
               onClick={() => setSearchOpen(true)}
-              className="flex items-center justify-center w-10 h-10 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+              className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               aria-label="Search"
@@ -54,7 +54,7 @@ const Header = () => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <motion.button
-                  className="flex items-center justify-center w-10 h-10 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                  className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   aria-label="Menu"
@@ -95,7 +95,7 @@ const Header = () => {
       </motion.header>
 
       {/* Spacer for fixed header */}
-      <div className="h-16" />
+      <div className="h-14 sm:h-16" />
 
       {/* Search Popup */}
       <SearchPopup isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
