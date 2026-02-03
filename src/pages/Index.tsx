@@ -4,11 +4,12 @@ import { motion } from 'framer-motion';
 import { useMovies } from '@/context/MovieContext';
 import Header from '@/components/Header';
 import NetflixFilters from '@/components/NetflixFilters';
-import HorizontalMovieCard from '@/components/HorizontalMovieCard';
+import VerticalMovieCard from '@/components/VerticalMovieCard';
 import HeroBanner from '@/components/HeroBanner';
 import Pagination from '@/components/Pagination';
+import RequestMovieDialog from '@/components/RequestMovieDialog';
 import { CategoryFilter, LanguageFilter, Movie } from '@/types/movie';
-import { Loader2, TrendingUp, Sparkles, Clock } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 
 const MOVIES_PER_PAGE = 12;
@@ -95,33 +96,6 @@ const Index = () => {
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
   };
 
-  // Group movies by category for rows
-  const recentMovies = filteredMovies.slice(0, 12);
-  const hollywoodMovies = movies.filter(m => m.category === 'hollywood').slice(0, 12);
-  const bollywoodMovies = movies.filter(m => m.category === 'bollywood').slice(0, 12);
-
-  const MovieRow = ({ title, icon: Icon, movies: rowMovies }: { title: string; icon: React.ElementType; movies: Movie[] }) => (
-    <motion.section variants={itemVariants} className="mb-10">
-      <div className="container">
-        <div className="flex items-center gap-3 mb-4">
-          <Icon className="w-5 h-5 text-primary" />
-          <h2 className="font-display text-xl md:text-2xl font-bold">{title}</h2>
-        </div>
-      </div>
-      
-      {/* Horizontal Scroll Container */}
-      <div className="overflow-x-auto scrollbar-hide">
-        <div className="flex gap-4 px-4 md:px-8 lg:px-12 pb-4">
-          {rowMovies.map((movie, index) => (
-            <Link to={`/movie/${movie.id}`} key={movie.id}>
-              <HorizontalMovieCard movie={movie} index={index} />
-            </Link>
-          ))}
-        </div>
-      </div>
-    </motion.section>
-  );
-
   return (
     <motion.div 
       className="min-h-screen bg-background"
@@ -131,21 +105,24 @@ const Index = () => {
     >
       <Header />
       
-      {/* Hero Banner - Full Width */}
+      {/* Hero Banner - Full Width Edge to Edge */}
       <motion.section variants={itemVariants}>
         {!loading && (featuredMovies.length > 0 || movies.length > 0) && (
           <HeroBanner movies={featuredMovies.length > 0 ? featuredMovies : movies} />
         )}
       </motion.section>
 
-      {/* Filters */}
-      <motion.section variants={itemVariants} className="container py-6">
-        <NetflixFilters
-          categoryFilter={categoryFilter}
-          onCategoryChange={(c) => { setCategoryFilter(c); handleFilterChange(); }}
-          languageFilter={languageFilter}
-          onLanguageChange={(l) => { setLanguageFilter(l); handleFilterChange(); }}
-        />
+      {/* Filters and Request Button */}
+      <motion.section variants={itemVariants} className="px-4 sm:px-6 md:px-8 lg:px-12 py-4 sm:py-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <NetflixFilters
+            categoryFilter={categoryFilter}
+            onCategoryChange={(c) => { setCategoryFilter(c); handleFilterChange(); }}
+            languageFilter={languageFilter}
+            onLanguageChange={(l) => { setLanguageFilter(l); handleFilterChange(); }}
+          />
+          <RequestMovieDialog />
+        </div>
       </motion.section>
 
       {/* Loading State */}
@@ -155,24 +132,9 @@ const Index = () => {
         </div>
       ) : (
         <>
-          {/* Trending Row */}
-          {recentMovies.length > 0 && (
-            <MovieRow title="Trending Now" icon={TrendingUp} movies={recentMovies} />
-          )}
-
-          {/* Hollywood Row */}
-          {hollywoodMovies.length > 0 && (
-            <MovieRow title="Hollywood" icon={Sparkles} movies={hollywoodMovies} />
-          )}
-
-          {/* Bollywood Row */}
-          {bollywoodMovies.length > 0 && (
-            <MovieRow title="Bollywood" icon={Clock} movies={bollywoodMovies} />
-          )}
-
-          {/* All Movies Grid with Pagination */}
+          {/* All Movies Grid - Vertical Scroll with Pagination */}
           {paginatedMovies.length > 0 && (
-            <motion.section variants={itemVariants} className="container mb-16">
+            <motion.section variants={itemVariants} className="px-4 sm:px-6 md:px-8 lg:px-12 pb-16">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="font-display text-xl md:text-2xl font-bold">All Movies</h2>
                 <p className="text-sm text-muted-foreground">
@@ -180,27 +142,28 @@ const Index = () => {
                 </p>
               </div>
               
-              <div className="overflow-x-auto scrollbar-hide">
-                <div className="flex gap-4 pb-4">
-                  {paginatedMovies.map((movie, index) => (
-                    <Link to={`/movie/${movie.id}`} key={movie.id}>
-                      <HorizontalMovieCard movie={movie} index={index} />
-                    </Link>
-                  ))}
-                </div>
+              {/* Responsive Grid - Vertical Scrollable */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
+                {paginatedMovies.map((movie, index) => (
+                  <Link to={`/movie/${movie.id}`} key={movie.id}>
+                    <VerticalMovieCard movie={movie} index={index} />
+                  </Link>
+                ))}
               </div>
 
               {/* Pagination */}
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-              />
+              <div className="mt-8">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                />
+              </div>
             </motion.section>
           )}
 
           {filteredMovies.length === 0 && (
-            <motion.div variants={itemVariants} className="text-center py-20">
+            <motion.div variants={itemVariants} className="text-center py-20 px-4">
               <p className="text-muted-foreground text-lg">No movies found matching your criteria</p>
             </motion.div>
           )}

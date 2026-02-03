@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
-import { ArrowLeft, Film, FileText, Package, LogOut, Loader2, Layers } from 'lucide-react';
+import { ArrowLeft, Film, FileText, Package, LogOut, Loader2, Layers, MessageSquare } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import ThemeToggle from '@/components/ThemeToggle';
 import MovieAdmin from '@/components/admin/MovieAdmin';
 import BlogAdmin from '@/components/admin/BlogAdmin';
 import SoftwareAdmin from '@/components/admin/SoftwareAdmin';
 import SliderAdmin from '@/components/admin/SliderAdmin';
+import MovieRequestsAdmin from '@/components/admin/MovieRequestsAdmin';
 import { Button } from '@/components/ui/button';
 
-type AdminTab = 'movies' | 'slider' | 'blog' | 'software';
+type AdminTab = 'movies' | 'slider' | 'blog' | 'software' | 'requests';
 
 const Admin = () => {
   const { user, isAdmin, loading, signOut } = useAuth();
@@ -30,6 +31,7 @@ const Admin = () => {
   const tabs = [
     { id: 'movies' as const, label: 'Movies', icon: Film },
     { id: 'slider' as const, label: 'Slider', icon: Layers },
+    { id: 'requests' as const, label: 'Requests', icon: MessageSquare },
     { id: 'blog' as const, label: 'Blog', icon: FileText },
     { id: 'software' as const, label: 'Software', icon: Package },
   ];
@@ -38,52 +40,52 @@ const Admin = () => {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur">
-        <div className="container flex h-16 items-center justify-between">
-          <div className="flex items-center gap-4">
+        <div className="px-4 sm:px-6 md:px-8 flex h-14 sm:h-16 items-center justify-between">
+          <div className="flex items-center gap-2 sm:gap-4">
             <Link
               to="/"
-              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="flex items-center gap-1 sm:gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
-              Back
+              <span className="hidden sm:inline">Back</span>
             </Link>
-            <div className="flex items-center gap-2.5">
-              <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-primary">
-                <Film className="w-5 h-5 text-primary-foreground" />
+            <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-primary">
+                <Film className="w-4 h-4 sm:w-5 sm:h-5 text-primary-foreground" />
               </div>
-              <span className="font-display text-xl font-bold">Admin Panel</span>
+              <span className="font-display text-lg sm:text-xl font-bold">Admin</span>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             {!isAdmin && (
-              <span className="text-sm text-amber-500 font-medium">
+              <span className="text-xs sm:text-sm text-amber-500 font-medium">
                 Not Admin
               </span>
             )}
-            <Button variant="ghost" size="sm" onClick={signOut}>
-              <LogOut className="w-4 h-4 mr-2" />
-              Logout
+            <Button variant="ghost" size="sm" onClick={signOut} className="px-2 sm:px-3">
+              <LogOut className="w-4 h-4 sm:mr-2" />
+              <span className="hidden sm:inline">Logout</span>
             </Button>
             <ThemeToggle />
           </div>
         </div>
       </header>
 
-      <main className="container py-8">
+      <main className="px-4 sm:px-6 md:px-8 py-6 sm:py-8">
         {/* Tab Switcher */}
-        <div className="flex items-center gap-2 p-1 mb-8 w-fit rounded-lg bg-secondary overflow-x-auto">
+        <div className="flex items-center gap-1 sm:gap-2 p-1 mb-6 sm:mb-8 w-full sm:w-fit rounded-lg bg-secondary overflow-x-auto scrollbar-hide">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-md transition-all whitespace-nowrap ${
+              className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-medium rounded-md transition-all whitespace-nowrap ${
                 activeTab === tab.id
                   ? 'bg-background text-foreground shadow-sm'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               <tab.icon className="w-4 h-4" />
-              {tab.label}
+              <span className="hidden xs:inline">{tab.label}</span>
             </button>
           ))}
         </div>
@@ -91,6 +93,7 @@ const Admin = () => {
         {/* Content */}
         {activeTab === 'movies' && <MovieAdmin />}
         {activeTab === 'slider' && <SliderAdmin />}
+        {activeTab === 'requests' && <MovieRequestsAdmin />}
         {activeTab === 'blog' && <BlogAdmin />}
         {activeTab === 'software' && <SoftwareAdmin />}
       </main>

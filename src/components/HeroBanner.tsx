@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Play, Plus, ChevronLeft, ChevronRight, Star, Clock, Calendar, Download } from 'lucide-react';
+import { Play, Plus, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Movie } from '@/types/movie';
 import { Link } from 'react-router-dom';
@@ -36,8 +36,8 @@ const HeroBanner = ({ movies }: HeroBannerProps) => {
   };
 
   return (
-    <div className="relative w-screen -ml-[calc((100vw-100%)/2)] h-[70vh] md:h-[80vh] overflow-hidden">
-      {/* Background Image - Full Width */}
+    <div className="relative w-full h-[60vh] sm:h-[70vh] md:h-[80vh] overflow-hidden">
+      {/* Background Image - Full Width Edge to Edge */}
       <AnimatePresence mode="wait">
         <motion.div
           key={currentMovie.id}
@@ -50,17 +50,17 @@ const HeroBanner = ({ movies }: HeroBannerProps) => {
           <img
             src={currentMovie.poster}
             alt={currentMovie.title}
-            className="w-full h-full object-cover object-top"
+            className="w-full h-full object-cover object-center"
           />
           {/* Gradient Overlays */}
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/60 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/30" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/20" />
         </motion.div>
       </AnimatePresence>
 
       {/* Content */}
-      <div className="absolute inset-0 flex items-end pb-16 md:pb-24">
-        <div className="container">
+      <div className="absolute inset-0 flex items-end pb-12 sm:pb-16 md:pb-20">
+        <div className="px-4 sm:px-6 md:px-8 lg:px-12 w-full">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentMovie.id}
@@ -68,74 +68,36 @@ const HeroBanner = ({ movies }: HeroBannerProps) => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.5 }}
-              className="max-w-2xl space-y-4"
+              className="max-w-2xl space-y-3 sm:space-y-4"
             >
+              {/* Language Tags */}
+              <div className="flex items-center gap-2 text-sm sm:text-base text-foreground/90 font-medium">
+                <span className="capitalize">{currentMovie.language === 'dual' ? 'English | Hindi' : currentMovie.language}</span>
+              </div>
+
               {/* Title */}
-              <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+              <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
                 {currentMovie.title}
               </h1>
 
-              {/* Meta Info */}
-              <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-                <span className="flex items-center gap-1.5">
-                  <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                  <span className="text-foreground font-medium">4.5</span>
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Clock className="w-4 h-4" />
-                  2h 15m
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Calendar className="w-4 h-4" />
-                  {currentMovie.date}
-                </span>
-                <span className="px-2.5 py-1 rounded-md bg-primary text-primary-foreground text-xs font-bold">
-                  {currentMovie.quality}
-                </span>
-                <span className="px-2.5 py-1 rounded-md bg-secondary text-secondary-foreground text-xs font-medium capitalize">
-                  {currentMovie.category}
-                </span>
-              </div>
-
               {/* Description */}
-              <p className="text-muted-foreground line-clamp-2 max-w-xl text-base md:text-lg">
+              <p className="text-muted-foreground line-clamp-2 text-sm sm:text-base md:text-lg max-w-xl">
                 {currentMovie.info || "Experience the ultimate cinematic journey with stunning visuals and captivating storytelling."}
               </p>
 
-              {/* Genre Tags */}
-              <div className="flex items-center gap-2 flex-wrap">
-                {['Action', 'Drama', 'Thriller'].map((genre, i) => (
-                  <span 
-                    key={genre}
-                    className="text-sm text-foreground underline underline-offset-4 hover:text-primary cursor-pointer transition-colors"
-                  >
-                    {genre}
-                    {i < 2 && <span className="text-muted-foreground ml-2">•</span>}
-                  </span>
-                ))}
-              </div>
-
-              {/* Action Buttons */}
+              {/* Action Buttons - Watch Now + Plus only */}
               <div className="flex items-center gap-3 pt-2">
                 <Link to={`/watch/${currentMovie.id}`}>
-                  <Button size="lg" className="gap-2 h-12 px-6 text-base">
-                    <Play className="w-5 h-5" fill="currentColor" />
-                    Play
+                  <Button size="lg" className="gap-2 h-10 sm:h-12 px-4 sm:px-6 text-sm sm:text-base">
+                    <Play className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" />
+                    Watch Now
                   </Button>
                 </Link>
                 <Link to={`/movie/${currentMovie.id}`}>
-                  <Button size="lg" variant="secondary" className="gap-2 h-12 px-6 text-base bg-secondary/80 backdrop-blur-sm hover:bg-secondary">
-                    <Plus className="w-5 h-5" />
-                    More Info
+                  <Button size="icon" variant="secondary" className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 border border-white/20">
+                    <Plus className="w-5 h-5 sm:w-6 sm:h-6" />
                   </Button>
                 </Link>
-                {currentMovie.downloadLink && (
-                  <a href={currentMovie.downloadLink} target="_blank" rel="noopener noreferrer">
-                    <Button size="icon" variant="outline" className="h-12 w-12 rounded-full backdrop-blur-sm">
-                      <Download className="w-5 h-5" />
-                    </Button>
-                  </a>
-                )}
               </div>
             </motion.div>
           </AnimatePresence>
@@ -143,35 +105,37 @@ const HeroBanner = ({ movies }: HeroBannerProps) => {
       </div>
 
       {/* Navigation Arrows */}
-      <div className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 flex flex-col gap-3">
+      <div className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2">
         <Button
-          variant="secondary"
+          variant="ghost"
           size="icon"
-          className="rounded-full w-12 h-12 bg-background/30 backdrop-blur-md border border-border/50 hover:bg-background/50"
+          className="rounded-full w-10 h-10 sm:w-12 sm:h-12 bg-black/20 backdrop-blur-sm hover:bg-black/40 text-white"
           onClick={handlePrev}
         >
-          <ChevronLeft className="w-6 h-6" />
+          <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
         </Button>
+      </div>
+      <div className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2">
         <Button
-          variant="secondary"
+          variant="ghost"
           size="icon"
-          className="rounded-full w-12 h-12 bg-background/30 backdrop-blur-md border border-border/50 hover:bg-background/50"
+          className="rounded-full w-10 h-10 sm:w-12 sm:h-12 bg-black/20 backdrop-blur-sm hover:bg-black/40 text-white"
           onClick={handleNext}
         >
-          <ChevronRight className="w-6 h-6" />
+          <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
         </Button>
       </div>
 
       {/* Slide Indicators */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+      <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
         {featuredMovies.map((_, idx) => (
           <button
             key={idx}
             onClick={() => setCurrentIndex(idx)}
             className={`transition-all duration-300 rounded-full ${
               idx === currentIndex 
-                ? 'w-8 h-2 bg-primary' 
-                : 'w-2 h-2 bg-muted-foreground/50 hover:bg-muted-foreground'
+                ? 'w-6 sm:w-8 h-2 bg-white' 
+                : 'w-2 h-2 bg-white/50 hover:bg-white/70'
             }`}
             aria-label={`Go to slide ${idx + 1}`}
           />
