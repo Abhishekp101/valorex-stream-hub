@@ -36,24 +36,35 @@ const MovieRequestsAdmin = () => {
   }, []);
 
   const handleMarkDone = async (request: MovieRequest) => {
-    const { error } = await supabase
-      .from('movie_requests')
-      .update({ status: 'done' })
-      .eq('id', request.id);
+    try {
+      const { error } = await supabase
+        .from('movie_requests')
+        .update({ status: 'done' })
+        .eq('id', request.id);
 
-    if (!error) {
-      // Open WhatsApp if number is available
-      if (request.whatsapp_number) {
-        const message = encodeURIComponent(
-          `Hi! Your requested movie "${request.movie_name}" is now available on Valorex. Visit our website to watch/download it now!`
-        );
-        const cleanNumber = request.whatsapp_number.replace(/\D/g, '');
-        window.open(`https://wa.me/${cleanNumber}?text=${message}`, '_blank');
+      if (!error) {
+        // Open WhatsApp if number is available
+        if (request.whatsapp_number) {
+          const message = encodeURIComponent(
+            `🎬 Great news! Your requested movie "${request.movie_name}" is now available on Valorex!\n\n✅ Visit our website to watch or download it now!`
+          );
+          // Clean the number - remove all non-digits
+          let cleanNumber = request.whatsapp_number.replace(/\D/g, '');
+          // If number doesn't start with country code, assume it needs one
+          if (cleanNumber.length === 10) {
+            cleanNumber = '91' + cleanNumber; // Default to India
+          }
+          window.open(`https://wa.me/${cleanNumber}?text=${message}`, '_blank');
+        }
+        toast.success('Request marked as done' + (request.whatsapp_number ? ' - WhatsApp opened' : ''));
+        fetchRequests();
+      } else {
+        console.error('Update error:', error);
+        toast.error('Failed to update request');
       }
-      toast.success('Request marked as done');
-      fetchRequests();
-    } else {
-      toast.error('Failed to update request');
+    } catch (err) {
+      console.error('Error:', err);
+      toast.error('An error occurred');
     }
   };
 

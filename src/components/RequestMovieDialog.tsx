@@ -25,22 +25,29 @@ const RequestMovieDialog = () => {
 
     setLoading(true);
     
-    const { error } = await supabase
-      .from('movie_requests')
-      .insert({
-        movie_name: movieName.trim(),
-        language,
-        whatsapp_number: whatsapp.trim() || null,
-      });
+    try {
+      const { error } = await supabase
+        .from('movie_requests')
+        .insert({
+          movie_name: movieName.trim(),
+          language,
+          whatsapp_number: whatsapp.trim() || null,
+          status: 'pending'
+        });
 
-    if (error) {
-      toast.error('Failed to submit request');
-    } else {
-      toast.success('Movie request submitted successfully!');
-      setMovieName('');
-      setLanguage('');
-      setWhatsapp('');
-      setOpen(false);
+      if (error) {
+        console.error('Supabase error:', error);
+        toast.error('Failed to submit request. Please try again.');
+      } else {
+        toast.success('Movie request submitted successfully!');
+        setMovieName('');
+        setLanguage('');
+        setWhatsapp('');
+        setOpen(false);
+      }
+    } catch (err) {
+      console.error('Request error:', err);
+      toast.error('An error occurred. Please try again.');
     }
     
     setLoading(false);
