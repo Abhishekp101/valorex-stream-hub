@@ -55,11 +55,12 @@ const MovieModal = ({ movie, onClose }: MovieModalProps) => {
 
           <div className="flex flex-col md:flex-row">
             <div className="w-full md:w-2/5 flex-shrink-0">
-              <div className="aspect-[2/3] relative">
+              {/* Force horizontal poster (16:9) */}
+              <div className="aspect-video relative">
                 <img
                   src={movie.poster}
                   alt={movie.title}
-                  className="w-full h-full object-cover md:rounded-l-xl"
+                  className="w-full h-full object-cover md:rounded-l-xl rounded-t-xl md:rounded-t-none"
                 />
                 <div className="absolute top-4 left-4">
                   <span className="inline-flex items-center px-3 py-1.5 text-sm font-semibold rounded bg-valorex-badge text-valorex-badge-foreground">

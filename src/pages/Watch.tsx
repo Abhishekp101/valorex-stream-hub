@@ -183,11 +183,14 @@ const Watch = () => {
         >
           <div className="flex items-start gap-4">
             {movie.poster_url && (
-              <img
-                src={movie.poster_url}
-                alt={movie.title}
-                className="w-20 h-28 object-cover rounded-lg flex-shrink-0"
-              />
+              <div className="w-28 aspect-video overflow-hidden rounded-lg flex-shrink-0 bg-muted">
+                <img
+                  src={movie.poster_url}
+                  alt={movie.title}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
             )}
             <div className="flex-1">
               <h2 className="font-display text-xl font-bold mb-2">{movie.title}</h2>

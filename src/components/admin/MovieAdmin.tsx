@@ -263,7 +263,7 @@ const MovieAdmin = () => {
                 <img
                   src={movie.poster}
                   alt={movie.title}
-                  className="w-12 h-16 object-cover rounded"
+                  className="w-16 aspect-video object-cover rounded"
                 />
                 <div className="flex-1 min-w-0">
                   <h3 className="font-medium text-sm truncate">{movie.title}</h3>
