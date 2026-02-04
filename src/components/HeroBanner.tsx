@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Play, Plus, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Play, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Movie } from '@/types/movie';
 import { Link } from 'react-router-dom';
@@ -26,14 +26,6 @@ const HeroBanner = ({ movies }: HeroBannerProps) => {
   if (featuredMovies.length === 0) return null;
 
   const currentMovie = featuredMovies[currentIndex];
-
-  const handlePrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + featuredMovies.length) % featuredMovies.length);
-  };
-
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % featuredMovies.length);
-  };
 
   return (
     <div className="relative w-full h-[60vh] sm:h-[70vh] md:h-[80vh] overflow-hidden">
@@ -104,29 +96,7 @@ const HeroBanner = ({ movies }: HeroBannerProps) => {
         </div>
       </div>
 
-      {/* Navigation Arrows */}
-      <div className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="rounded-full w-10 h-10 sm:w-12 sm:h-12 bg-black/20 backdrop-blur-sm hover:bg-black/40 text-white"
-          onClick={handlePrev}
-        >
-          <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
-        </Button>
-      </div>
-      <div className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="rounded-full w-10 h-10 sm:w-12 sm:h-12 bg-black/20 backdrop-blur-sm hover:bg-black/40 text-white"
-          onClick={handleNext}
-        >
-          <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
-        </Button>
-      </div>
-
-      {/* Slide Indicators */}
+      {/* Slide Indicators - Simple Dots */}
       <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
         {featuredMovies.map((_, idx) => (
           <button
