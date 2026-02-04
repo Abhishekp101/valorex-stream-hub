@@ -19,6 +19,22 @@ const MovieRequestsAdmin = () => {
   const [requests, setRequests] = useState<MovieRequest[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const buildWhatsAppUrl = (rawNumber: string, movieName: string) => {
+    const message = encodeURIComponent(
+      `🎬 Great news! Your requested movie "${movieName}" is now available on Valorex!\n\n✅ Visit our website to watch or download it now!`
+    );
+
+    // Clean the number - remove all non-digits
+    let cleanNumber = rawNumber.replace(/\D/g, '');
+
+    // If number doesn't start with country code, assume it needs one
+    if (cleanNumber.length === 10) {
+      cleanNumber = '91' + cleanNumber; // Default to India
+    }
+
+    return `https://wa.me/${cleanNumber}?text=${message}`;
+  };
+
   const fetchRequests = async () => {
     const { data, error } = await supabase
       .from('movie_requests')
@@ -36,6 +52,12 @@ const MovieRequestsAdmin = () => {
   }, []);
 
   const handleMarkDone = async (request: MovieRequest) => {
+    // IMPORTANT: open the popup synchronously (user gesture), otherwise browsers may block it
+    const waUrl = request.whatsapp_number
+      ? buildWhatsAppUrl(request.whatsapp_number, request.movie_name)
+      : null;
+    const waWindow = waUrl ? window.open('about:blank', '_blank') : null;
+
     try {
       const { error } = await supabase
         .from('movie_requests')
@@ -43,26 +65,27 @@ const MovieRequestsAdmin = () => {
         .eq('id', request.id);
 
       if (!error) {
-        // Open WhatsApp if number is available
-        if (request.whatsapp_number) {
-          const message = encodeURIComponent(
-            `🎬 Great news! Your requested movie "${request.movie_name}" is now available on Valorex!\n\n✅ Visit our website to watch or download it now!`
-          );
-          // Clean the number - remove all non-digits
-          let cleanNumber = request.whatsapp_number.replace(/\D/g, '');
-          // If number doesn't start with country code, assume it needs one
-          if (cleanNumber.length === 10) {
-            cleanNumber = '91' + cleanNumber; // Default to India
+        if (waUrl) {
+          if (waWindow) {
+            waWindow.location.href = waUrl;
+          } else {
+            // Fallback if popup was blocked
+            window.open(waUrl, '_blank');
+            toast.info('If WhatsApp did not open, please allow popups for this site.');
           }
-          window.open(`https://wa.me/${cleanNumber}?text=${message}`, '_blank');
+        } else if (waWindow) {
+          waWindow.close();
         }
-        toast.success('Request marked as done' + (request.whatsapp_number ? ' - WhatsApp opened' : ''));
+
+        toast.success('Request marked as done');
         fetchRequests();
       } else {
+        if (waWindow) waWindow.close();
         console.error('Update error:', error);
         toast.error('Failed to update request');
       }
     } catch (err) {
+      if (waWindow) waWindow.close();
       console.error('Error:', err);
       toast.error('An error occurred');
     }

@@ -18,7 +18,8 @@ const MovieCard = ({ movie, onClick, index }: MovieCardProps) => {
       className="group cursor-pointer"
       onClick={onClick}
     >
-      <div className="relative aspect-[2/3] overflow-hidden rounded-xl bg-muted">
+      {/* Force horizontal poster everywhere (16:9) */}
+      <div className="relative aspect-video overflow-hidden rounded-xl bg-muted">
         <img
           src={movie.poster}
           alt={movie.title}
