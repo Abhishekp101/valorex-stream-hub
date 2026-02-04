@@ -21,18 +21,20 @@ const MovieRequestsAdmin = () => {
 
   const buildWhatsAppUrl = (rawNumber: string, movieName: string) => {
     const message = encodeURIComponent(
-      `🎬 Great news! Your requested movie "${movieName}" is now available on Valorex!\n\n✅ Visit our website to watch or download it now!`
+      `Great news! Your requested movie "${movieName}" is now available on Valorex.\n\nVisit our website to watch or download it now.`
     );
 
     // Clean the number - remove all non-digits
     let cleanNumber = rawNumber.replace(/\D/g, '');
 
-    // If number doesn't start with country code, assume it needs one
-    if (cleanNumber.length === 10) {
-      cleanNumber = '91' + cleanNumber; // Default to India
-    }
+    // If number is local 10-digit, assume India (+91)
+    if (cleanNumber.length === 10) cleanNumber = `91${cleanNumber}`;
 
-    return `https://wa.me/${cleanNumber}?text=${message}`;
+    // Basic guard
+    if (cleanNumber.length < 10) return null;
+
+    // api.whatsapp.com works better on mobile + desktop than wa.me in some browsers
+    return `https://api.whatsapp.com/send?phone=${cleanNumber}&text=${message}`;
   };
 
   const fetchRequests = async () => {
@@ -52,40 +54,32 @@ const MovieRequestsAdmin = () => {
   }, []);
 
   const handleMarkDone = async (request: MovieRequest) => {
-    // IMPORTANT: open the popup synchronously (user gesture), otherwise browsers may block it
-    const waUrl = request.whatsapp_number
-      ? buildWhatsAppUrl(request.whatsapp_number, request.movie_name)
-      : null;
-    const waWindow = waUrl ? window.open('about:blank', '_blank') : null;
-
     try {
+      // Open WhatsApp FIRST (still within user click). If we await first, many browsers block popups.
+      const waUrl = request.whatsapp_number
+        ? buildWhatsAppUrl(request.whatsapp_number, request.movie_name)
+        : null;
+
+      if (waUrl) {
+        const opened = window.open(waUrl, '_blank', 'noopener,noreferrer');
+        if (!opened) {
+          toast.info('If WhatsApp did not open, please allow popups for this site.');
+        }
+      }
+
       const { error } = await supabase
         .from('movie_requests')
         .update({ status: 'done' })
         .eq('id', request.id);
 
       if (!error) {
-        if (waUrl) {
-          if (waWindow) {
-            waWindow.location.href = waUrl;
-          } else {
-            // Fallback if popup was blocked
-            window.open(waUrl, '_blank');
-            toast.info('If WhatsApp did not open, please allow popups for this site.');
-          }
-        } else if (waWindow) {
-          waWindow.close();
-        }
-
         toast.success('Request marked as done');
         fetchRequests();
       } else {
-        if (waWindow) waWindow.close();
         console.error('Update error:', error);
         toast.error('Failed to update request');
       }
     } catch (err) {
-      if (waWindow) waWindow.close();
       console.error('Error:', err);
       toast.error('An error occurred');
     }
