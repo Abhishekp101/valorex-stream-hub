@@ -8,6 +8,7 @@ import VerticalMovieCard from '@/components/VerticalMovieCard';
 import HeroBanner from '@/components/HeroBanner';
 import Pagination from '@/components/Pagination';
 import RequestMovieDialog from '@/components/RequestMovieDialog';
+import ContinueWatching from '@/components/ContinueWatching';
 import { CategoryFilter, LanguageFilter, Movie } from '@/types/movie';
 import { Loader2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
@@ -124,6 +125,9 @@ const Index = () => {
           <RequestMovieDialog />
         </div>
       </motion.section>
+
+      {/* Continue Watching Section - Only visible for logged in users with watch history */}
+      <ContinueWatching />
 
       {/* Loading State */}
       {loading ? (

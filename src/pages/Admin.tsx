@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
-import { ArrowLeft, Film, FileText, Package, LogOut, Loader2, Layers, MessageSquare } from 'lucide-react';
+import { ArrowLeft, Film, FileText, Package, LogOut, Loader2, Layers, MessageSquare, Users } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import ThemeToggle from '@/components/ThemeToggle';
 import MovieAdmin from '@/components/admin/MovieAdmin';
@@ -8,9 +8,10 @@ import BlogAdmin from '@/components/admin/BlogAdmin';
 import SoftwareAdmin from '@/components/admin/SoftwareAdmin';
 import SliderAdmin from '@/components/admin/SliderAdmin';
 import MovieRequestsAdmin from '@/components/admin/MovieRequestsAdmin';
+import UsersAdmin from '@/components/admin/UsersAdmin';
 import { Button } from '@/components/ui/button';
 
-type AdminTab = 'movies' | 'slider' | 'blog' | 'software' | 'requests';
+type AdminTab = 'movies' | 'slider' | 'blog' | 'software' | 'requests' | 'users';
 
 const Admin = () => {
   const { user, isAdmin, loading, signOut } = useAuth();
@@ -32,6 +33,7 @@ const Admin = () => {
     { id: 'movies' as const, label: 'Movies', icon: Film },
     { id: 'slider' as const, label: 'Slider', icon: Layers },
     { id: 'requests' as const, label: 'Requests', icon: MessageSquare },
+    { id: 'users' as const, label: 'Users', icon: Users },
     { id: 'blog' as const, label: 'Blog', icon: FileText },
     { id: 'software' as const, label: 'Software', icon: Package },
   ];
@@ -94,6 +96,7 @@ const Admin = () => {
         {activeTab === 'movies' && <MovieAdmin />}
         {activeTab === 'slider' && <SliderAdmin />}
         {activeTab === 'requests' && <MovieRequestsAdmin />}
+        {activeTab === 'users' && <UsersAdmin />}
         {activeTab === 'blog' && <BlogAdmin />}
         {activeTab === 'software' && <SoftwareAdmin />}
       </main>

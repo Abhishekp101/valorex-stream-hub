@@ -1,14 +1,23 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Download, Calendar, Film, Star, Clock, Globe, Play, Plus, Share2 } from 'lucide-react';
+import { Download, Calendar, Film, Star, Clock, Play, Plus, Check, Share2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { supabase } from '@/integrations/supabase/client';
 import Header from '@/components/Header';
 import VerticalMovieCard from '@/components/VerticalMovieCard';
+import ShareButtons from '@/components/ShareButtons';
+import { useWatchlist } from '@/hooks/useWatchlist';
+import { useAuth } from '@/context/AuthContext';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import { Movie } from '@/types/movie';
 
 interface MovieDB {
@@ -30,6 +39,8 @@ const MovieDetails = () => {
   const [movie, setMovie] = useState<MovieDB | null>(null);
   const [relatedMovies, setRelatedMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
+  const { isInWatchlist, toggleWatchlist, loading: watchlistLoading } = useWatchlist(id);
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -198,13 +209,40 @@ const MovieDetails = () => {
                   </a>
                 ) : null}
                 
-                <Button size="icon" variant="secondary" className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 border border-white/20">
-                  <Plus className="w-5 h-5 sm:w-6 sm:h-6" />
+                <Button 
+                  size="icon" 
+                  variant="secondary" 
+                  className={`h-10 w-10 sm:h-12 sm:w-12 rounded-full backdrop-blur-sm border border-white/20 transition-colors ${
+                    isInWatchlist 
+                      ? 'bg-primary hover:bg-primary/90' 
+                      : 'bg-white/20 hover:bg-white/30'
+                  }`}
+                  onClick={() => {
+                    if (!user) {
+                      toast.error('Please login to add to watchlist');
+                      return;
+                    }
+                    toggleWatchlist();
+                  }}
+                  disabled={watchlistLoading}
+                >
+                  {isInWatchlist ? (
+                    <Check className="w-5 h-5 sm:w-6 sm:h-6" />
+                  ) : (
+                    <Plus className="w-5 h-5 sm:w-6 sm:h-6" />
+                  )}
                 </Button>
                 
-                <Button size="icon" variant="secondary" className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 border border-white/20">
-                  <Share2 className="w-5 h-5" />
-                </Button>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button size="icon" variant="secondary" className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 border border-white/20">
+                      <Share2 className="w-5 h-5" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-3" align="start">
+                    <ShareButtons title={movie.title} />
+                  </PopoverContent>
+                </Popover>
                 
                 {movie.download_link && (
                   <a href={movie.download_link} target="_blank" rel="noopener noreferrer">
