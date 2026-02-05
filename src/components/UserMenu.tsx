@@ -70,7 +70,7 @@
            </Link>
          </DropdownMenuItem>
          <DropdownMenuItem asChild className="cursor-pointer">
-           <Link to="/?tab=watchlist" className="flex items-center gap-2">
+             <Link to="/watchlist" className="flex items-center gap-2">
              <BookmarkPlus className="w-4 h-4" />
              My Watchlist
            </Link>

@@ -1,4 +1,5 @@
  import { useState, useEffect } from 'react';
+ import { useCallback } from 'react';
  import { supabase } from '@/integrations/supabase/client';
  import { useAuth } from '@/context/AuthContext';
  import { toast } from 'sonner';
@@ -16,7 +17,7 @@
      }
    }, [user, movieId]);
  
-   const checkWatchlist = async () => {
+   const checkWatchlist = useCallback(async () => {
      if (!user || !movieId) return;
      
      const { data } = await supabase
@@ -27,7 +28,7 @@
        .maybeSingle();
      
      setIsInWatchlist(!!data);
-   };
+   }, [user, movieId]);
  
    const toggleWatchlist = async () => {
      if (!user) {
@@ -63,5 +64,22 @@
      setLoading(false);
    };
  
-   return { isInWatchlist, toggleWatchlist, loading };
+   const removeFromWatchlist = async () => {
+     if (!user || !movieId) return;
+     
+     setLoading(true);
+     const { error } = await supabase
+       .from('watchlist')
+       .delete()
+       .eq('user_id', user.id)
+       .eq('movie_id', movieId);
+     
+     if (!error) {
+       setIsInWatchlist(false);
+       toast.success('Removed from watchlist');
+     }
+     setLoading(false);
+   };
+ 
+   return { isInWatchlist, toggleWatchlist, removeFromWatchlist, loading };
  };
