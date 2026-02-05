@@ -7,6 +7,7 @@ import Header from '@/components/Header';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import VideoPlayer from '@/components/VideoPlayer';
+import { useAuth } from '@/context/AuthContext';
 
 interface Movie {
   id: string;
@@ -21,6 +22,7 @@ const Watch = () => {
   const [movie, setMovie] = useState<Movie | null>(null);
   const [loading, setLoading] = useState(true);
   const [embedUrl, setEmbedUrl] = useState<string | null>(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -42,6 +44,16 @@ const Watch = () => {
           const embedLink = convertToEmbedUrl(movieData.video_link);
           setEmbedUrl(embedLink);
         }
+        
+        // Track watch history for logged in users
+        if (user && movieData.id) {
+          await supabase.from('watch_history').upsert({
+            user_id: user.id,
+            movie_id: movieData.id,
+            progress_seconds: 0,
+            last_watched_at: new Date().toISOString(),
+          }, { onConflict: 'user_id,movie_id' });
+        }
       }
       
       setLoading(false);
@@ -49,7 +61,7 @@ const Watch = () => {
 
     fetchMovie();
     window.scrollTo(0, 0);
-  }, [id]);
+  }, [id, user]);
 
   // Convert Google Drive link to embeddable format
   const convertToEmbedUrl = (url: string): string => {

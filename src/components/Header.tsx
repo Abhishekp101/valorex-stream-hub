@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Search, Menu, FileText, Package, Settings, X } from 'lucide-react';
+import { Search, Menu, FileText, Package } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import AnimatedLogo from './AnimatedLogo';
 import SearchPopup from './SearchPopup';
+import UserMenu from './UserMenu';
 import { cn } from '@/lib/utils';
 import {
   DropdownMenu,
@@ -20,7 +21,6 @@ const Header = () => {
   const menuItems = [
     { to: '/blog', icon: FileText, label: 'Blog' },
     { to: '/software', icon: Package, label: 'Software' },
-    { to: '/admin', icon: Settings, label: 'Admin' },
   ];
 
   return (
@@ -62,7 +62,7 @@ const Header = () => {
                   <Menu className="w-5 h-5" />
                 </motion.button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
+          <DropdownMenuContent align="end" className="w-40">
                 {menuItems.map((item) => {
                   const isActive = location.pathname === item.to;
                   return (
@@ -82,6 +82,9 @@ const Header = () => {
                 })}
               </DropdownMenuContent>
             </DropdownMenu>
+
+        {/* User Menu */}
+        <UserMenu />
 
             {/* Theme Toggle */}
             <motion.div 

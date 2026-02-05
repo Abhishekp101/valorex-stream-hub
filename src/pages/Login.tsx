@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { Film, ArrowLeft, Loader2 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 import ThemeToggle from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -25,7 +26,7 @@ const Login = () => {
   }
 
   if (user) {
-    return <Navigate to="/admin" replace />;
+    return <Navigate to="/" replace />;
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -66,9 +67,18 @@ const Login = () => {
             variant: 'destructive',
           });
         } else {
+          // Create user profile after successful signup
+          const { data: { user: newUser } } = await supabase.auth.getUser();
+          if (newUser) {
+            await supabase.from('user_profiles').insert({
+              user_id: newUser.id,
+              display_name: email.split('@')[0],
+            });
+          }
+          
           toast({
             title: 'Account Created',
-            description: 'You can now login with your credentials.',
+            description: 'Please check your email to verify your account.',
           });
           setIsLogin(true);
         }
@@ -95,7 +105,7 @@ const Login = () => {
               <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-primary">
                 <Film className="w-5 h-5 text-primary-foreground" />
               </div>
-              <span className="font-display text-xl font-bold">Admin Login</span>
+              <span className="font-display text-xl font-bold">Valorex</span>
             </div>
           </div>
           <ThemeToggle />
@@ -106,7 +116,7 @@ const Login = () => {
         <div className="max-w-md mx-auto">
           <div className="bg-card border border-border rounded-xl p-8">
             <h1 className="font-display text-2xl font-bold text-center mb-6">
-              {isLogin ? 'Login to Admin Panel' : 'Create Admin Account'}
+              {isLogin ? 'Welcome Back' : 'Create Account'}
             </h1>
 
             <form onSubmit={handleSubmit} className="space-y-4">
