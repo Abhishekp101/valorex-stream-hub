@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Download, Calendar, Film, Star, Clock, Play, Plus, Check, Share2 } from 'lucide-react';
+ import { Minus } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { supabase } from '@/integrations/supabase/client';
 import Header from '@/components/Header';
@@ -227,7 +228,7 @@ const MovieDetails = () => {
                   disabled={watchlistLoading}
                 >
                   {isInWatchlist ? (
-                    <Check className="w-5 h-5 sm:w-6 sm:h-6" />
+                     <Minus className="w-5 h-5 sm:w-6 sm:h-6" />
                   ) : (
                     <Plus className="w-5 h-5 sm:w-6 sm:h-6" />
                   )}
