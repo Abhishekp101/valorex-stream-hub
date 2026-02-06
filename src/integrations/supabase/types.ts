@@ -44,6 +44,47 @@ export type Database = {
         }
         Relationships: []
       }
+      episodes: {
+        Row: {
+          created_at: string
+          download_link: string | null
+          duration: string | null
+          episode_number: number
+          id: string
+          season_id: string
+          title: string
+          video_link: string | null
+        }
+        Insert: {
+          created_at?: string
+          download_link?: string | null
+          duration?: string | null
+          episode_number: number
+          id?: string
+          season_id: string
+          title: string
+          video_link?: string | null
+        }
+        Update: {
+          created_at?: string
+          download_link?: string | null
+          duration?: string | null
+          episode_number?: number
+          id?: string
+          season_id?: string
+          title?: string
+          video_link?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "episodes_season_id_fkey"
+            columns: ["season_id"]
+            isOneToOne: false
+            referencedRelation: "seasons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       movie_requests: {
         Row: {
           created_at: string
@@ -83,6 +124,7 @@ export type Database = {
           info: string | null
           is_featured: boolean | null
           language: string | null
+          normal_print_link: string | null
           poster_url: string | null
           quality: string | null
           release_date: string | null
@@ -98,6 +140,7 @@ export type Database = {
           info?: string | null
           is_featured?: boolean | null
           language?: string | null
+          normal_print_link?: string | null
           poster_url?: string | null
           quality?: string | null
           release_date?: string | null
@@ -113,6 +156,7 @@ export type Database = {
           info?: string | null
           is_featured?: boolean | null
           language?: string | null
+          normal_print_link?: string | null
           poster_url?: string | null
           quality?: string | null
           release_date?: string | null
@@ -121,6 +165,38 @@ export type Database = {
           video_link?: string | null
         }
         Relationships: []
+      }
+      seasons: {
+        Row: {
+          created_at: string
+          id: string
+          season_number: number
+          series_id: string
+          title: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          season_number: number
+          series_id: string
+          title?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          season_number?: number
+          series_id?: string
+          title?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "seasons_series_id_fkey"
+            columns: ["series_id"]
+            isOneToOne: false
+            referencedRelation: "web_series"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       software_games: {
         Row: {
@@ -284,6 +360,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      web_series: {
+        Row: {
+          category: string | null
+          created_at: string
+          id: string
+          info: string | null
+          language: string | null
+          poster_url: string | null
+          release_date: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          id?: string
+          info?: string | null
+          language?: string | null
+          poster_url?: string | null
+          release_date?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          id?: string
+          info?: string | null
+          language?: string | null
+          poster_url?: string | null
+          release_date?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
     }
     Views: {

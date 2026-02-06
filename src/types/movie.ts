@@ -9,6 +9,7 @@ export interface Movie {
   info: string;
   downloadLink: string;
   videoLink?: string;
+  normalPrintLink?: string;
   isFeatured?: boolean;
 }
 

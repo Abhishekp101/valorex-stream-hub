@@ -43,6 +43,7 @@ const Index = () => {
           info: m.info || '',
           downloadLink: m.download_link || '',
           videoLink: m.video_link || '',
+          normalPrintLink: (m as any).normal_print_link || '',
         }));
         setFeaturedMovies(mapped);
       } else {
@@ -140,7 +141,7 @@ const Index = () => {
           {paginatedMovies.length > 0 && (
             <motion.section variants={itemVariants} className="px-4 sm:px-6 md:px-8 lg:px-12 pb-16">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="font-display text-xl md:text-2xl font-bold">All Movies</h2>
+                <h2 className="font-display text-xl md:text-2xl font-bold">Movies And Web-Series</h2>
                 <p className="text-sm text-muted-foreground">
                   {filteredMovies.length} movies
                 </p>

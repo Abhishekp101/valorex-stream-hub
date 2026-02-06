@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
-import { ArrowLeft, Film, FileText, Package, LogOut, Loader2, Layers, MessageSquare, Users } from 'lucide-react';
+import { ArrowLeft, Film, FileText, Package, LogOut, Loader2, Layers, MessageSquare, Users, Tv } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
-import ThemeToggle from '@/components/ThemeToggle';
 import MovieAdmin from '@/components/admin/MovieAdmin';
 import BlogAdmin from '@/components/admin/BlogAdmin';
 import SoftwareAdmin from '@/components/admin/SoftwareAdmin';
 import SliderAdmin from '@/components/admin/SliderAdmin';
 import MovieRequestsAdmin from '@/components/admin/MovieRequestsAdmin';
 import UsersAdmin from '@/components/admin/UsersAdmin';
+import WebSeriesAdmin from '@/components/admin/WebSeriesAdmin';
 import { Button } from '@/components/ui/button';
 
-type AdminTab = 'movies' | 'slider' | 'blog' | 'software' | 'requests' | 'users';
+type AdminTab = 'movies' | 'slider' | 'blog' | 'software' | 'requests' | 'users' | 'series';
 
 const Admin = () => {
   const { user, isAdmin, loading, signOut } = useAuth();
@@ -31,6 +31,7 @@ const Admin = () => {
 
   const tabs = [
     { id: 'movies' as const, label: 'Movies', icon: Film },
+    { id: 'series' as const, label: 'Web Series', icon: Tv },
     { id: 'slider' as const, label: 'Slider', icon: Layers },
     { id: 'requests' as const, label: 'Requests', icon: MessageSquare },
     { id: 'users' as const, label: 'Users', icon: Users },
@@ -68,7 +69,6 @@ const Admin = () => {
               <LogOut className="w-4 h-4 sm:mr-2" />
               <span className="hidden sm:inline">Logout</span>
             </Button>
-            <ThemeToggle />
           </div>
         </div>
       </header>
@@ -94,6 +94,7 @@ const Admin = () => {
 
         {/* Content */}
         {activeTab === 'movies' && <MovieAdmin />}
+        {activeTab === 'series' && <WebSeriesAdmin />}
         {activeTab === 'slider' && <SliderAdmin />}
         {activeTab === 'requests' && <MovieRequestsAdmin />}
         {activeTab === 'users' && <UsersAdmin />}
