@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Search, Menu, FileText, Package } from 'lucide-react';
-import ThemeToggle from './ThemeToggle';
 import AnimatedLogo from './AnimatedLogo';
 import SearchPopup from './SearchPopup';
 import UserMenu from './UserMenu';
@@ -83,16 +82,8 @@ const Header = () => {
               </DropdownMenuContent>
             </DropdownMenu>
 
-        {/* User Menu */}
-        <UserMenu />
-
-            {/* Theme Toggle */}
-            <motion.div 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <ThemeToggle />
-            </motion.div>
+            {/* User Menu */}
+            <UserMenu />
           </nav>
         </div>
       </motion.header>

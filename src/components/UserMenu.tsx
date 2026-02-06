@@ -63,18 +63,18 @@
            </div>
          </DropdownMenuLabel>
          <DropdownMenuSeparator />
-         <DropdownMenuItem asChild className="cursor-pointer">
-           <Link to="/?tab=history" className="flex items-center gap-2">
-             <History className="w-4 h-4" />
-             Watch History
-           </Link>
-         </DropdownMenuItem>
-         <DropdownMenuItem asChild className="cursor-pointer">
-             <Link to="/watchlist" className="flex items-center gap-2">
-             <BookmarkPlus className="w-4 h-4" />
-             My Watchlist
-           </Link>
-         </DropdownMenuItem>
+        <DropdownMenuItem asChild className="cursor-pointer">
+          <Link to="/history" className="flex items-center gap-2">
+            <History className="w-4 h-4" />
+            Watch History
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild className="cursor-pointer">
+          <Link to="/watchlist" className="flex items-center gap-2">
+            <BookmarkPlus className="w-4 h-4" />
+            My Watchlist
+          </Link>
+        </DropdownMenuItem>
          {isAdmin && (
            <>
              <DropdownMenuSeparator />

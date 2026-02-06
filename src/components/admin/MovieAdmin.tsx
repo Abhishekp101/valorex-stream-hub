@@ -21,6 +21,7 @@ const MovieAdmin = () => {
     info: '',
     downloadLink: '',
     videoLink: '',
+    normalPrintLink: '',
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -51,6 +52,7 @@ const MovieAdmin = () => {
         info: '',
         downloadLink: '',
         videoLink: '',
+        normalPrintLink: '',
       });
     } catch (error: any) {
       toast({
@@ -209,7 +211,7 @@ const MovieAdmin = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1.5">Video Link (Google Drive)</label>
+            <label className="block text-sm font-medium mb-1.5">Video Link (Google Drive - HD)</label>
             <input
               type="url"
               name="videoLink"
@@ -218,7 +220,20 @@ const MovieAdmin = () => {
               placeholder="https://drive.google.com/file/d/..."
               className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
             />
-            <p className="text-xs text-muted-foreground mt-1">Optional: Add a Google Drive video link for online streaming</p>
+            <p className="text-xs text-muted-foreground mt-1">HD quality streaming link</p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1.5">Normal Print Link (Google Drive)</label>
+            <input
+              type="url"
+              name="normalPrintLink"
+              value={formData.normalPrintLink}
+              onChange={handleChange}
+              placeholder="https://drive.google.com/file/d/..."
+              className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            />
+            <p className="text-xs text-muted-foreground mt-1">Normal quality streaming link (shows play button on cards)</p>
           </div>
 
           <button

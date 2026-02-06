@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Play } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Movie } from '@/types/movie';
 
 interface VerticalMovieCardProps {
@@ -8,6 +9,8 @@ interface VerticalMovieCardProps {
 }
 
 const VerticalMovieCard = ({ movie, index }: VerticalMovieCardProps) => {
+  const hasNormalPrint = !!movie.normalPrintLink;
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 20 }}
@@ -38,6 +41,23 @@ const VerticalMovieCard = ({ movie, index }: VerticalMovieCardProps) => {
             {movie.language}
           </span>
         </div>
+
+        {/* Normal Print Play Button - Visible when link available */}
+        {hasNormalPrint && (
+          <Link
+            to={`/watch/${movie.id}?quality=normal`}
+            onClick={(e) => e.stopPropagation()}
+            className="absolute bottom-14 right-3 z-10"
+          >
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              className="w-10 h-10 rounded-full bg-primary/90 flex items-center justify-center backdrop-blur-sm shadow-lg"
+            >
+              <Play className="w-5 h-5 text-primary-foreground ml-0.5" fill="currentColor" />
+            </motion.div>
+          </Link>
+        )}
         
         {/* Hover Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">

@@ -35,6 +35,7 @@ export const MovieProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         info: m.info || '',
         downloadLink: m.download_link || '',
         videoLink: m.video_link || '',
+        normalPrintLink: (m as any).normal_print_link || '',
       }));
       setMovies(mappedMovies);
     }
@@ -56,6 +57,7 @@ export const MovieProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       info: movie.info,
       download_link: movie.downloadLink,
       video_link: movie.videoLink || null,
+      normal_print_link: movie.normalPrintLink || null,
     });
 
     if (!error) {

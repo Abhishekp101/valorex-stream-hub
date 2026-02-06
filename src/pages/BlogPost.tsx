@@ -2,7 +2,6 @@ import { useParams, Link } from 'react-router-dom';
 import { Film, ArrowLeft, Calendar, Download } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useBlog } from '@/context/BlogContext';
-import ThemeToggle from '@/components/ThemeToggle';
 import ShareButtons from '@/components/ShareButtons';
 
 const BlogPost = () => {
@@ -51,7 +50,6 @@ const BlogPost = () => {
             </div>
             <span className="font-display text-xl font-bold tracking-tight">Valorex</span>
           </Link>
-          <ThemeToggle />
         </div>
       </header>
 

@@ -3,7 +3,6 @@ import { Link, Navigate } from 'react-router-dom';
 import { Film, ArrowLeft, Loader2 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
-import ThemeToggle from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -108,7 +107,6 @@ const Login = () => {
               <span className="font-display text-xl font-bold">Valorex</span>
             </div>
           </div>
-          <ThemeToggle />
         </div>
       </header>
 
